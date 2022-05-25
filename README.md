@@ -1,65 +1,65 @@
 # Austin Crime Project
 
-## This repository contains the work for the Codeup Data Science Capstone Project
+by: Alejandro Garcia, Matthew Luna, Kristofer Rivera, Oliver Ton    June 2022
 
-## Alejandro Garcia, Matthew Luna, Kristofer Rivera, Oliver Ton    June 2022
-
-Table of Contents
----
- 
-* I. [Project Description](#i-project-description)<br>
-* II. [Project Goals](#ii-project-goals)<br>
-* III. [Business Goals](#iii-gusiness-goals)<br>
-* IV. [Data Dictionary](#iv-data-dictionary)<br>
-* V. [Data Science Pipeline](#v-project-planning)<br>
-[1. Project Plan](#1-plan)<br>
-[2. Data Acquisition](#2-acquire)<br>
-[3. Data Preparation](#3-prepare)<br>
-[4. Data Exploration](#4-explore)<br>
-[5. Modeling & Evaluation](#5-model)<br>
-[6. Product Delivery](#6-deliver)<br>
-* V. [Project Reproduction](#vi-to-recreate)<br>
-* VI. [Key Takeaway](#vii-takeaways)<br>
-* VI. [Next Steps](#viii-next-steps)<br>
-
-## I. Project Description
-
--------------------
+This repository contains all files, and ipython notebooks, used in the Austin Crime Data Science Capstone Project.
 
 
+___
 
- 
+## Table of Contents
 
-## II. Project Goals
+* I. [Project Summary](#i-project-summary)<br>
+* II. [Project Planning](#ii-project-planning)
+    [1. Project Goals](#ii-project-goals)<br>
+    [2. Business Goals](#iii-gusiness-goals)<br>
+    [3. Project Description](#i-project-description)<br>
+* III. [Data Dictionary](#iii-data-dictionary)<br>
+* IV. [Outline of Project Plan](#iv-outline-of-project-plan)<br>
+    [1. Project Plan](#1-plan)<br>
+    [2. Data Acquisition](#2-acquire)<br>
+    [3. Data Preparation](#3-prepare)<br>
+    [4. Data Exploration](#4-explore)<br>
+    [5. Modeling & Evaluation](#5-model)<br>
+    [6. Product Delivery](#6-deliver)<br>
+* V. [Conclusion](#v-conclusion)<br>
+* VI. [Instructions For Recreating This Project](#vi-instructions-for-recreating-this-project)<br>
 
--------------
+___
 
-
-1. Create scripts to perform the following:
-
-                a. acquisition of data from GitHub's website
-
-                b. preparation of data
-
-                c. exploration of data
-
-                d. modeling
-
-2. Build and evaluate _______ models to predict ______
- 
-
-## III. Business Goals
-
---------------
+## I. Project Summary
 
 
 
- 
+___
 
-## IV. Data Dictionary
+## II. Project Planning
 
----------------
+<details><summary><i>Click to expand</i></summary>
 
+### Project Goals
+
+
+
+### Business Goals
+
+
+
+### Project Description
+
+
+
+### Initial Questions
+
+
+
+</details>
+
+___
+
+## III. Data Dictionary
+
+<details><summary><i>Click to expand</i></summary>
 
 
 | Name |   Datatype   |      Definition    |    Possible Values  |
@@ -75,80 +75,83 @@ Additionally, a set of features were added to the data set:
 |:-----                 | :-----       |:------------------------------                         |:-----              |
 
 
+</details>
 
- 
+___
 
-## V. Project Planning
-
-----------------
+## IV. Outline of Project Plan
 
 The overall process followed in this project is as follows:
+<br>
+Plan  -->  Acquire   --> Prepare  --> Explore  --> Model  --> Deliver
 
- 
+---
+### Data Acquisition
 
-###  Plan  -->  Acquire   --> Prepare  --> Explore  --> Model  --> Deliver
+<details><summary><i>Click to expand</i></summary>
 
-
---------------
-
-
-### 1. Plan
-
+**Acquisition Files:**
 
 
-
-### 2. Acquire
-
+**Steps Taken:**
 
 
-### 3. Prepare
+</details>
 
-This functionality is stored in the python script "prepare.py". It will perform the following actions:
+### Data Preparation
 
+<details><summary><i>Click to expand</i></summary>
 
-- split the data into 3 datasets - train/test/validate - used in modeling
-
-  - Train: 56% of the data
-
-  - Validate: 24% of the data
-
-  - Test: 20% of the data
-
- 
-
-### 4. Explore
-
-Answer the following questions using data visualization and statistical testing:
+**Preparation Files:**
 
 
-
-### 5. Model
-
-
-Compare the models against the baseline and each other based on the accuracy score from the validate sample. We sorted by ascending dropoff in accuracy from train to validate to guard against choosing an overfit model. 
-
-Test the best performing model on witheld test data.
+**Steps Taken:**
 
 
-### 6. Deliver
+</details>
+
+### Exploratory Analysis
+
+<details><summary><i>Click to expand</i></summary>
+
+**Exploratory Analysis Files:**
 
 
-### VI. To recreate
-
-----------------
+**Steps Taken:**
 
 
+</details>
 
- 
+### Modeling
 
-### VII. Takeaways
+<details><summary><i>Click to expand</i></summary>
 
--------------
+**Modeling Files:**
 
 
- 
+**Steps Taken:**
 
-### VIII. Next Steps
 
--------------
+</details>
 
+___
+
+## V. Conclusion
+
+<details><summary><i>Click to expand</i></summary>
+
+
+
+</details>
+
+___
+
+## VI. Instructions For Recreating This Project
+
+<details><summary><i>Click to expand</i></summary>
+
+
+
+</details>
+
+[Back to top](#austin-crime-project)
