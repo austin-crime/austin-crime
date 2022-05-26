@@ -29,8 +29,6 @@ ___
 
 ## I. Project Summary
 
-This project will dive into crime data from the city of Austin for the years 2018 through 2021. Having a deeper understanding of the crime in Austin will allow for improved public safety outcomes. This project will cover key indicators for successfully closing a case, the most frequent types of crimes, Austin city district crime rate, and the seasonality of crimes. Our goal is that this project will guide the allocation of resources toward improving public safety. Let’s keep Austin weird! And safe.
-
 ___
 
 ## II. Project Planning
@@ -39,18 +37,29 @@ ___
 
 ### Project Goals
 
+- Create a machine learning model that can predict whether or not a crime is solved/closed in Austin.
 
+### Problem Statement
 
-### Business Goals
-
-
+- What factors contribute to whether or not a crime is solved/closed in the city of Austin?
 
 ### Project Description
 
-
+- This project will dive into crime data from the city of Austin for the years 2018 through 
+2021. 
+- Having a deeper understanding of the crime in Austin will allow for improved public safety 
+outcomes. 
+- This project will cover key indicators for successfully closing a case, the most frequent 
+types of crimes, Austin city district crime rate, and the seasonality of crimes. 
+- Our goal is that this project will guide the allocation of resources toward improving public 
+safety. Let’s keep Austin weird! And safe.
 
 ### Initial Questions
 
+- We predict that there is a relationship between the type of crime and clearance status.
+- We predict there is a relationship between city council district and clearance status.
+- We predict that there is a relationship between higher seasonal levels of crime and clearance status.
+- We predict that the difference in time between when an incident occurred and when it was reported relates to the clearance status of the case.
 
 
 </details>
@@ -123,23 +132,26 @@ Plan  -->  Acquire   --> Prepare  --> Explore  --> Model  --> Deliver
 
 <details><summary><i>Click to expand</i></summary>
 
-- The data set was gathered from publicly available data provided by the Austin Police Department on data.austintexas.gov.
-- We created a function to automate gathering the data from the provided API and caching it locally as a CSV file. 
-- Our initial data set included 500,000 rows and 31 columns. 
-- For ease of use and relevancy, we decided to limit our data to crimes reported between the years 2018 and 2021. 
-- After removing data outside this time frame, we were left with 401,955 rows. 
 
 **Acquisition Files:**
 
 
 **Steps Taken:**
 
+- The data set was gathered from publicly available data provided by the Austin Police 
+Department on data.austintexas.gov.
+- We created a function to automate gathering the data from the provided API and caching it 
+locally as a CSV file. 
+- Our initial data set included 500,000 rows and 31 columns. 
+- For ease of use and relevancy, we decided to limit our data to crimes reported between the 
+years 2018 and 2021. 
+- After removing data outside this time frame, we were left with 401,955 rows. 
 
 </details>
 
 ### Data Preparation
 
-<details><summary><i>Click to expand</i></summary>
+<details><summary><i>Click to expand</i></summary>git
 
 **Preparation Files:**
 
