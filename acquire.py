@@ -14,7 +14,7 @@ def get_crime_data(use_cache=True):
     print('Acquiring data from api')
 
     df = read_from_api()
-    df.to_csv(csv)
+    df.to_csv(csv, index = False)
     
     return df
 
