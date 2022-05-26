@@ -199,6 +199,9 @@ def prep_data(df):
     df.clearance_date = pd.to_datetime(df.clearance_date, format = '%Y-%m-%d')
     df.occurence_time = pd.to_datetime(df.occurence_time, format = '%H%M')
     df.report_time = pd.to_datetime(df.report_time, format = '%H%M')
+
+    df.occurence_time = df.occurence_time.dt.strftime('%H:%M')
+    df.report_time = df.report_time.dt.strftime('%H:%M')
     
     return df 
 
