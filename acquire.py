@@ -1,6 +1,6 @@
 import pandas as pd
 import os
-from sodapy import socrata
+from sodapy import Socrata
 
 csv = 'Crime_Reports.csv'
 
