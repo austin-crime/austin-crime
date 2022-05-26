@@ -116,5 +116,92 @@ def visualize_scaler(scaler, df, target_columns, bins=10):
     return fig, axs
 
 
+######### Cleaning Steps ##############
+
+def prep_data(df):
+    
+    # Change occurence date to datetime type in order to subeset data
+    df.occ_date = pd.to_datetime(df.occ_date, format = '%Y-%m-%d')
+    
+    # Subset the data to include observations between 2018-01-01 and 2021-12-31.
+    df = df[(df.occ_date >= '2018-01-01') & (df.occ_date <= '2021-12-31')]
+    
+    # These are all the columns that will be dropped from the dataframe.
+    columns = [
+        'incident_report_number',
+        'ucr_code',
+        'ucr_category',
+        'category_description',
+        ':@computed_region_a3it_2a2z',
+        ':@computed_region_8spj_utxs',
+        ':@computed_region_q9nd_rr82',
+        ':@computed_region_qwte_z96m',
+        'x_coordinate',
+        'y_coordinate',
+        'location',
+        'census_tract',
+        'pra',
+        'occ_date_time',
+        'rep_date_time']
+    
+    # Drop duplicated information and unncessary/unuseful columns
+    df = df.drop(columns = columns)
+    
+    # Here we'll drop rows with missing values that cannot be reasonabled imputed with a value.
+    null_columns = [
+    'clearance_status',
+    'clearance_date',
+    'zip_code',
+    'sector',
+    'district',
+    'latitude',
+    'longitude']
+    
+    for column in null_columns:
+        df = df[~df[column].isna()]
+    
+    # Here we'll fill missing values for some columns with a value we have decided upon.
+    df['location_type'] = df.location_type.fillna('OTHER / UNKNOWN') #filling all na with the Other/Unknown value
+    df['council_district'] = df.council_district.fillna(9) # filling all na with the most common district
+    
+    # Renaming columns for clarity and readability
+    
+    mapper = {
+    'occ_date' : 'occurence_date',
+    'occ_time' : 'occurence_time',
+    'rep_date' : 'report_date',
+    'rep_time' : 'report_time'}
+    
+    df = df.rename(columns = mapper)
+    
+    # Changing clearance status values to a more readable version using the data documentation 
+    
+    clearance_mapper = {
+    'N' : 'not cleared',
+    'O' : 'cleared by exception',
+    'C' : 'cleared by arrest'}
+    
+    df['clearance_status'] = df.clearance_status.map(clearance_mapper)
+    
+    # Changing data to numeric types where appropriate
+    df.latitude = df.latitude.astype('float')
+    df.longitude = df.longitude.astype('float')
+
+    # We want to change the date and time columns to datetime types.
+    
+    ## Adding the trailing zeros for military time 
+    df.occurence_time = df.occurence_time.apply(lambda time: f'{int(time):04d}')
+    df.report_time = df.report_time.apply(lambda time: f'{int(time):04d}')
+    
+    ## Converting to datetime format
+
+    df.report_date = pd.to_datetime(df.report_date, format = '%Y-%m-%d')
+    df.clearance_date = pd.to_datetime(df.clearance_date, format = '%Y-%m-%d')
+    df.occurence_time = pd.to_datetime(df.occurence_time, format = '%H%M')
+    df.report_time = pd.to_datetime(df.report_time, format = '%H%M')
+    
+    return df 
+
+    
 
 
