@@ -45,8 +45,7 @@ ___
 
 ### Project Description
 
-- This project will dive into crime data from the city of Austin for the years 2018 through 
-2021. 
+- This project will dive into crime data from the city of Austin for the years 2018 through 2021. 
 - Having a deeper understanding of the crime in Austin will allow for improved public safety 
 outcomes. 
 - This project will cover key indicators for successfully closing a case, the most frequent 
