@@ -29,7 +29,7 @@ ___
 
 ## I. Project Summary
 
-
+This project will dive into crime data from the city of Austin for the years 2018 through 2021. Having a deeper understanding of the crime in Austin will allow for improved public safety outcomes. This project will cover key indicators for successfully closing a case, the most frequent types of crimes, Austin city district crime rate, and the seasonality of crimes. Our goal is that this project will guide the allocation of resources toward improving public safety. Let’s keep Austin weird! And safe.
 
 ___
 
@@ -123,6 +123,12 @@ Plan  -->  Acquire   --> Prepare  --> Explore  --> Model  --> Deliver
 
 <details><summary><i>Click to expand</i></summary>
 
+- The data set was gathered from publicly available data provided by the Austin Police Department on data.austintexas.gov.
+- We created a function to automate gathering the data from the provided API and caching it locally as a CSV file. 
+- Our initial data set included 500,000 rows and 31 columns. 
+- For ease of use and relevancy, we decided to limit our data to crimes reported between the years 2018 and 2021. 
+- After removing data outside this time frame, we were left with 401,955 rows. 
+
 **Acquisition Files:**
 
 
@@ -140,6 +146,11 @@ Plan  -->  Acquire   --> Prepare  --> Explore  --> Model  --> Deliver
 
 **Steps Taken:**
 
+- After investigating columns with missing values, we decided to drop 15 columns entirely that we deemed to be unuseful or redundant. 
+- Next, we made decisions on how to handle the missing values in our remaining 16 columns. 
+- For 7 columns, including clearance_status, clearance_date, zip_code, sector, district, latitude, and longitude, we decided that we could not reasonably impute nulls with a value and dropped all missing rows. 
+- We had 753 missing values for location_type values which we decided to add to the Other / Unknown value. 
+- We had 1438 missing values for council_district which we decided to impute as the most common district. 
 
 </details>
 
