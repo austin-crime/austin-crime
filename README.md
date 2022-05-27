@@ -10,7 +10,7 @@ ___
 ## Table of Contents
 
 * I. [Project Summary](#i-project-summary)<br>
-* II. [Project Planning](#ii-project-planning)
+* II. [Project Planning](#ii-project-planning)<br>
     [1. Project Goals](#ii-project-goals)<br>
     [2. Business Goals](#iii-gusiness-goals)<br>
     [3. Project Description](#i-project-description)<br>
@@ -104,10 +104,9 @@ ___
 Additionally, a set of features were added to the data set:
 
  
-
-| Name                  |Datatype      | Definition                                             | Possible Values    |
-|:-----                 | :-----       |:------------------------------                         |:-----              |
-
+| Name                  | Definition    | Data Type                                   
+|:-----                 | :-----        |:-------------------------                  
+| geometry              | a list of coordinates | Multi-Polygon and Polygon
 
 </details>
 
@@ -144,7 +143,9 @@ locally as a CSV file.
 - Our initial data set included 500,000 rows and 31 columns. 
 - For ease of use and relevancy, we decided to limit our data to crimes reported between the 
 years 2018 and 2021. 
-- After removing data outside this time frame, we were left with 401,955 rows. 
+- After removing data outside this time frame, we were left with 401,955 rows.
+- Download the shapefile for boundaries zipcode tabulation areas at this [website](https://data.austintexas.gov/dataset/Boundaries-Zip-Code-Tabulation-Areas-2017/nf4y-c7ue)
+- Merge the dataframes and then create a new csv file.
 
 </details>
 
@@ -205,7 +206,18 @@ ___
 
 <details><summary><i>Click to expand</i></summary>
 
-
+- Need App Token for env file
+    - [Create App Token](https://evergreen.data.socrata.com)
+        - Click on "My Profile", then "Edit Profile", and navigate to the Developer Settings pane.
+- Make sure to install these packages before running
+    - [Learn More About sodapy](https://github.com/xmunoz/sodapy)
+    - [Learn More About geopandas](https://geopandas.org/en/stable/)
+```
+bash
+pip install sodapy
+pip install geopandas
+```
+- Clone our py files 
 
 </details>
 
