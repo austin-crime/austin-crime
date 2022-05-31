@@ -1,7 +1,7 @@
 import pandas as pd
 import os
 from sodapy import Socrata
-from env import *
+
 
 # Give a global variable name for csv
 csv = 'Crime_Reports.csv'
