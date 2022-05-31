@@ -264,8 +264,8 @@ def compare_means(train, target, quant_var, alt_hyp='two-sided'):
 #Function to visualize correlations
 def plot_correlations(df):
     plt.figure(figsize= (15, 8))
-    df.corr()['life_expectancy'].sort_values(ascending=False).plot(kind='bar', color = 'darkcyan')
-    plt.title('Correlations with Life Expectancy', fontsize = 18)
+    df.corr()['cleared'].sort_values(ascending=False).plot(kind='bar', color = 'darkcyan')
+    plt.title('Correlations with Clearance', fontsize = 18)
     plt.xlabel('Features')
     plt.ylabel('Correlation')
     plt.show()
