@@ -120,7 +120,7 @@ def visualize_scaler(scaler, df, target_columns, bins=10):
 
 def prep_data(df):
     
-    # Change occurence date to datetime type in order to subeset data
+    # Change occurrence date to datetime type in order to subeset data
     df.occ_date = pd.to_datetime(df.occ_date, format = '%Y-%m-%d')
     
     # Subset the data to include observations between 2018-01-01 and 2021-12-31.
@@ -141,8 +141,8 @@ def prep_data(df):
         'location',
         'census_tract',
         'pra',
-        'occ_date_time',
-        'rep_date_time']
+        'occ_time',
+        'rep_time']
     
     # Drop duplicated information and unncessary/unuseful columns
     df = df.drop(columns = columns)
@@ -167,10 +167,10 @@ def prep_data(df):
     # Renaming columns for clarity and readability
     
     mapper = {
-    'occ_date' : 'occurence_date',
-    'occ_time' : 'occurence_time',
+    'occ_date' : 'occurrence_date',
+    'occ_date_time' : 'occurrence_time',
     'rep_date' : 'report_date',
-    'rep_time' : 'report_time'}
+    'rep_date_time' : 'report_time'}
     
     df = df.rename(columns = mapper)
     
@@ -189,19 +189,12 @@ def prep_data(df):
 
     # We want to change the date and time columns to datetime types.
     
-    ## Adding the trailing zeros for military time 
-    df.occurence_time = df.occurence_time.apply(lambda time: f'{int(time):04d}')
-    df.report_time = df.report_time.apply(lambda time: f'{int(time):04d}')
-    
     ## Converting to datetime format
 
     df.report_date = pd.to_datetime(df.report_date, format = '%Y-%m-%d')
     df.clearance_date = pd.to_datetime(df.clearance_date, format = '%Y-%m-%d')
-    df.occurence_time = pd.to_datetime(df.occurence_time, format = '%H%M')
-    df.report_time = pd.to_datetime(df.report_time, format = '%H%M')
-
-    df.occurence_time = df.occurence_time.dt.strftime('%H:%M')
-    df.report_time = df.report_time.dt.strftime('%H:%M')
+    df.occurrence_time = pd.to_datetime(df.occurrence_time, format = '%Y-%m-%dT%H:%M:%S')
+    df.report_time = pd.to_datetime(df.report_time, format = '%Y-%m-%dT%H:%M:%S')
 
     # Create new target variable with True or False values where "not cleared" 
     # is False and "cleared by arrest" and "cleared by exception" are True.
