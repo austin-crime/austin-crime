@@ -33,7 +33,7 @@ def split_data(df):
 
     """
     This function takes in a dataframe, then splits and returns the data as train, validate, and test sets 
-    using random state 123.
+    using random state 42.
     """
     # split data into 2 groups, train_validate and test, assigning test as 20% of the dataset
     train_validate, test = train_test_split(
