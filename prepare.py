@@ -37,14 +37,14 @@ def split_data(df):
     """
     # split data into 2 groups, train_validate and test, assigning test as 20% of the dataset
     train_validate, test = train_test_split(
-        df, test_size=0.2, random_state=42, stratify=df["clearance_status"]
+        df, test_size=0.2, random_state=42, stratify=df["cleared"]
     )
     # split train_validate into 2 groups with
     train, validate = train_test_split(
         train_validate,
         test_size=0.3,
         random_state=42,
-        stratify=train_validate["clearance_status"],
+        stratify=train_validate["cleared"],
     )
     return train, validate, test
 
@@ -202,6 +202,12 @@ def prep_data(df):
 
     df.occurence_time = df.occurence_time.dt.strftime('%H:%M')
     df.report_time = df.report_time.dt.strftime('%H:%M')
+
+    # Create new target variable with True or False values where "not cleared" 
+    # is False and "cleared by arrest" and "cleared by exception" are True.
+    clearance = np.where(df.clearance_status == 'not cleared', False, True)
+    df['cleared'] = clearance
+    df.cleared.value_counts()
     
     return df 
 
