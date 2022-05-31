@@ -43,7 +43,7 @@ def read_from_api():
     # A limited number of requests can be made without an app token, 
     # but they are subject to much lower throttling limits than request that do include one.
     # With an app token, your application is guaranteed access to it's own pool of requests
-    client = Socrata("data.austintexas.gov", app_token)
+    client = Socrata("data.austintexas.gov", None)
     
     # .get(dataset_identifier) 
     # dataset_identifier: is a part of url, usually appear near the end of an url, 
