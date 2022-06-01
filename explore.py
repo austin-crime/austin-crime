@@ -17,8 +17,8 @@ def pearsonr(variable, target, alpha =.05):
     else:
         print('Since the P value is greater than the alpha, we fail to reject the null hypothesis.')
 
-def t_test_ind(sample1, sample2, alpha =.05):
-    t, p = stats.ttest_ind(sample1, sample2)
+def t_test_ind(sample1, sample2, alternative = 'two-sided', alpha =.05):
+    t, p = stats.ttest_ind(sample1, sample2, alternative = alternative)
     print(f'The t value between the two samples is {t:.4} and the P-Value is {p}.')
     print('----------------------------------------------------------------------------')
     if p < alpha:
