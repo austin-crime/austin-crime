@@ -1,7 +1,16 @@
 import pandas as pd
 import os
 from sodapy import Socrata
-from env import app_token
+
+# The API documentation states that a user should ideally create an app token to use the API,
+# however, it is not required and for the purposes of this project not having an app token 
+# does not cause any issues.
+
+# Attempt to import the app_token from env.py, if that fails set app_token to None.
+try:
+    from env import app_token
+except ImportError as e:
+    app_token = None
 
 # Give a global variable name for csv
 csv = 'Crime_Reports.csv'
@@ -43,7 +52,7 @@ def read_from_api():
     # A limited number of requests can be made without an app token, 
     # but they are subject to much lower throttling limits than request that do include one.
     # With an app token, your application is guaranteed access to it's own pool of requests
-    client = Socrata("data.austintexas.gov", None)
+    client = Socrata("data.austintexas.gov", app_token)
     
     # .get(dataset_identifier) 
     # dataset_identifier: is a part of url, usually appear near the end of an url, 
