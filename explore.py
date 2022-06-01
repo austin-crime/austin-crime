@@ -5,6 +5,36 @@ import seaborn as sns
 from sklearn.model_selection import train_test_split
 from scipy import stats
 
+# Visualizations for Final Notebook
+
+# Create a list with the top 10 crimes
+top_10_crimes = ['DWI', 'ASSAULT WITH INJURY', 'THEFT BY SHOPLIFTING', 'HARASSMENT', 
+                 'AUTO THEFT', 'ASSAULT W/INJURY-FAM/DATE VIOL', 'CRIMINAL MISCHIEF', 
+                 'FAMILY DISTURBANCE', 'THEFT', 'BURGLARY OF VEHICLE']
+
+# Create a subsetted df that only uses the top 10 crimes
+def subset_top_crimes(train):
+    top_crimes_df = train.copy()
+    top_crimes_df = top_crimes_df[top_crimes_df.crime_type.isin(top_10_crimes)]
+    return top_crimes_df
+
+def viz1(top_crimes_df): 
+    top_crimes_df.crime_type.value_counts().plot(kind='pie', y='cleared', autopct="%1.1f%%")
+    # remove y axis label
+    plt.ylabel(None)
+    #add title
+    plt.title('Top 10 Crimes as Percentage of Overall Crime Rate in Subset')
+    plt.show()
+        
+def viz2(top_crimes_df):
+    plt.title("Relationship Between Crime Type and Clearance Rate", fontsize=20)
+    top_crimes_df.groupby('crime_type').cleared.mean().sort_values(ascending=False).plot.bar()
+    plt.axhline(clearance_rate, label="Overall Clearance rate")
+    plt.ylabel('Clearance Rate', fontsize=13)
+    plt.xlabel('Crime Type', fontsize=13)
+    plt.xticks(rotation = 45) #Rotating the xticks 45 degrees for readability
+    plt.legend()
+    None
 
 #Statistical analysis 
 
