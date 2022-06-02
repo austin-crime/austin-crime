@@ -120,12 +120,33 @@ def visualize_scaler(scaler, df, target_columns, bins=10):
 
 def prep_data(df):
     
+    df = reduce_time_frame(df)
+    df = drop_columns(df)
+    df = remove_rows_missing_values(df)
+    df = impute_missing_values(df)
+    df = rename_columns(df)
+    df = rename_values(df)
+    df = cast_column_types(df)
+    df = engineer_features(df)
+    
+    return df 
+
+################################################################################
+
+def reduce_time_frame(df: pd.DataFrame) -> pd.DataFrame:
+
     # Change occurrence date to datetime type in order to subeset data
     df.occ_date = pd.to_datetime(df.occ_date, format = '%Y-%m-%d')
     
     # Subset the data to include observations between 2018-01-01 and 2021-12-31.
     df = df[(df.occ_date >= '2018-01-01') & (df.occ_date <= '2021-12-31')]
-    
+
+    return df
+
+################################################################################
+
+def drop_columns(df: pd.DataFrame) -> pd.DataFrame:
+
     # These are all the columns that will be dropped from the dataframe.
     columns = [
         'incident_report_number',
@@ -146,7 +167,13 @@ def prep_data(df):
     
     # Drop duplicated information and unncessary/unuseful columns
     df = df.drop(columns = columns)
-    
+
+    return df
+
+################################################################################
+
+def remove_rows_missing_values(df: pd.DataFrame) -> pd.DataFrame:
+
     # Here we'll drop rows with missing values that cannot be reasonabled imputed with a value.
     null_columns = [
     'clearance_status',
@@ -159,11 +186,23 @@ def prep_data(df):
     
     for column in null_columns:
         df = df[~df[column].isna()]
-    
+
+    return df
+
+################################################################################
+
+def impute_missing_values(df: pd.DataFrame) -> pd.DataFrame:
+
     # Here we'll fill missing values for some columns with a value we have decided upon.
     df['location_type'] = df.location_type.fillna('OTHER / UNKNOWN') #filling all na with the Other/Unknown value
     df['council_district'] = df.council_district.fillna(9) # filling all na with the most common district
-    
+
+    return df
+
+################################################################################
+
+def rename_columns(df: pd.DataFrame) -> pd.DataFrame:
+
     # Renaming columns for clarity and readability
     
     mapper = {
@@ -173,7 +212,13 @@ def prep_data(df):
     'rep_date_time' : 'report_time'}
     
     df = df.rename(columns = mapper)
-    
+
+    return df
+
+################################################################################
+
+def rename_values(df: pd.DataFrame) -> pd.DataFrame:
+
     # Changing clearance status values to a more readable version using the data documentation 
     
     clearance_mapper = {
@@ -182,7 +227,13 @@ def prep_data(df):
     'C' : 'cleared by arrest'}
     
     df['clearance_status'] = df.clearance_status.map(clearance_mapper)
-    
+
+    return df
+
+################################################################################
+
+def cast_column_types(df: pd.DataFrame) -> pd.DataFrame:
+
     # Changing data to numeric types where appropriate
     df.latitude = df.latitude.astype('float')
     df.longitude = df.longitude.astype('float')
@@ -196,14 +247,19 @@ def prep_data(df):
     df.occurrence_time = pd.to_datetime(df.occurrence_time, format = '%Y-%m-%dT%H:%M:%S')
     df.report_time = pd.to_datetime(df.report_time, format = '%Y-%m-%dT%H:%M:%S')
 
+    return df
+
+################################################################################
+
+def engineer_features(df: pd.DataFrame) -> pd.DataFrame:
+    
     # Create new target variable with True or False values where "not cleared" 
     # is False and "cleared by arrest" and "cleared by exception" are True.
     clearance = np.where(df.clearance_status == 'not cleared', False, True)
     df['cleared'] = clearance
-    df.cleared.value_counts()
-    
-    return df 
 
-    
+    # Create a feature that is the difference between when a crime occurred and 
+    # when it was reported.
+    df['time_to_report'] = df.report_time - df.occurrence_time
 
-
+    return df
