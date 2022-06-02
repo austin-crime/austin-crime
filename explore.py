@@ -24,6 +24,23 @@ def plot_cleared(df):
     plt.ylabel('Cleared', fontsize=12)
     plt.xlabel('Clearance Rate', fontsize=12)
     plt.show()
+    
+# Create a data frame for time-series analysis
+
+def time_series_df(train):
+    train2 = train.copy()
+    #df['occurrence_date']= pd.to_datetime(df['occurrence_date'])
+    train2 = train2.set_index('occurrence_date').sort_index()
+    #Split by month first
+    train2['month'] = train2.index.month_name()
+    #Split by weekdays
+    train2['weekdays'] = train2.index.day_name()
+    #Split by year
+    train2['year'] = train2.index.year
+    return train2
+
+# Visualizations for Final Notebook
+
 
 def viz1(top_crimes_df): 
     top_crimes_df.crime_type.value_counts().plot(kind='pie', y='cleared', autopct="%1.1f%%")
@@ -45,6 +62,31 @@ def viz2(top_crimes_df, train):
     plt.legend()
     None
 
+def viz5(train2):
+    train2.groupby(['year', 'month']).crime_type.count().unstack(0).plot.line()
+    plt.title("Crime Frequency by Year")
+    plt.xlabel("Months")
+    plt.ylabel("Number of Crimes")
+    plt.tick_params('x', rotation=360)
+    #plt.axhline(overall_mean,color="r")
+    None
+
+def viz6(train2):
+    y = train2.groupby(['weekdays','year'])['crime_type'].count()
+    #Take a look at all the crime types
+    train2['weekdays'] = pd.Categorical(train2['weekdays'], categories=['Monday', 'Tuesday', 'Wednesday', 
+                                                                        'Thursday', 'Friday', 'Saturday','Sunday'])
+    #overall_mean = df.groupby('month').crime_type.value_counts()
+    #Assuming 0 = Sunday, 1 = Monday, 2 = Tuesday, 3 = Wednesday, 4 = Thursday, 5 = Friday, 6 =Saturday
+    y.unstack(0).plot.bar()
+    #sns.barplot(x=None, y = y, data = y, ci = None)
+    plt.title("Crime Frequency by Weekday")
+    plt.xlabel("Weekdays")
+    plt.ylabel("Number of Crimes")
+    plt.tick_params('x', rotation=360)
+    #plt.axhline(overall_mean,color="r")
+    None
+    
 #Statistical analysis 
 
 def pearsonr(variable, target, alpha =.05):
