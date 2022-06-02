@@ -18,6 +18,13 @@ def subset_top_crimes(train):
     top_crimes_df = top_crimes_df[top_crimes_df.crime_type.isin(top_10_crimes)]
     return top_crimes_df
 
+def plot_cleared(df):
+    plt.title("Distribution of Clearance", fontsize=15)
+    sns.countplot(y="cleared", data=df)
+    plt.ylabel('Cleared', fontsize=12)
+    plt.xlabel('Clearance Rate', fontsize=12)
+    plt.show()
+
 def viz1(top_crimes_df): 
     top_crimes_df.crime_type.value_counts().plot(kind='pie', y='cleared', autopct="%1.1f%%")
     # remove y axis label
@@ -26,9 +33,11 @@ def viz1(top_crimes_df):
     plt.title('Top 10 Crimes as Percentage of Overall Crime Rate in Subset')
     plt.show()
         
-def viz2(top_crimes_df):
+def viz2(top_crimes_df, train):
     plt.title("Relationship Between Crime Type and Clearance Rate", fontsize=20)
     top_crimes_df.groupby('crime_type').cleared.mean().sort_values(ascending=False).plot.bar()
+    # calculating overall clearance rate
+    clearance_rate = train.cleared.mean()
     plt.axhline(clearance_rate, label="Overall Clearance rate")
     plt.ylabel('Clearance Rate', fontsize=13)
     plt.xlabel('Crime Type', fontsize=13)
