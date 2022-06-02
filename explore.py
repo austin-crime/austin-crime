@@ -25,11 +25,11 @@ def plot_cleared(df):
     plt.xlabel('Clearance Rate', fontsize=12)
     plt.show()
     
+    
 # Create a data frame for time-series analysis
 
 def time_series_df(train):
     train2 = train.copy()
-    #df['occurrence_date']= pd.to_datetime(df['occurrence_date'])
     train2 = train2.set_index('occurrence_date').sort_index()
     #Split by month first
     train2['month'] = train2.index.month_name()
@@ -37,7 +37,23 @@ def time_series_df(train):
     train2['weekdays'] = train2.index.day_name()
     #Split by year
     train2['year'] = train2.index.year
+    # Order the weekdays correctly
+    train2['weekdays'] = pd.Categorical(train2['weekdays'], categories=['Monday', 'Tuesday', 'Wednesday', 'Thursday', 
+                                                                        'Friday', 'Saturday', 'Sunday'])
+    # Order the months correctly
+    train2['month'] = pd.Categorical(train2['month'], categories=['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August',
+                                                            'September','October', 'November', 'December'])
     return train2
+
+# Create subsets of data only including Friday or not including Friday for an independent t-test
+def friday_subsets(time_series_df):
+    friday_only = ['Friday']
+    subset_friday = time_series_df.copy()
+    subset_friday = subset_friday[subset_friday.weekdays.isin(friday_only)]
+    subset_not_friday = time_series_df.copy()
+    subset_not_friday = subset_not_friday[~subset_not_friday.weekdays.isin(friday_only)]#Without friday
+    
+    return subset_friday, subset_not_friday
 
 # Visualizations for Final Notebook
 
