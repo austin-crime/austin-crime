@@ -25,6 +25,16 @@ def plot_cleared(df):
     plt.xlabel('Clearance Rate', fontsize=12)
     plt.show()
     
+# Create subsetted dfs with caseloads for all districts, the highest caseload district and the lowest caseload district
+
+def subset_districts(train):
+    train2 = train.copy()
+    train2['counts'] = train2.groupby(['council_district'])['crime_type'].transform('count')
+    overall_sample = train2.groupby('council_district').council_district.count().mean()
+    nine_sample = train2[train2.council_district == 9].counts
+    eight_sample = train2[train2.council_district == 8].counts
+    
+    return overall_sample, nine_sample, eight_sample
     
 # Create a data frame for time-series analysis
 
@@ -67,16 +77,46 @@ def viz1(top_crimes_df):
     plt.show()
         
 def viz2(top_crimes_df, train):
-    plt.title("Relationship Between Crime Type and Clearance Rate", fontsize=20)
-    top_crimes_df.groupby('crime_type').cleared.mean().sort_values(ascending=False).plot.bar()
-    # calculating overall clearance rate
     clearance_rate = train.cleared.mean()
+    plt.title("Relationship Between Crime Type and Clearance Rate", fontsize=20)
+    sns.barplot(x="crime_type", y="cleared", data=top_crimes_df,
+                order=['DWI', 'ASSAULT W/INJURY-FAM/DATE VIOL', 'THEFT BY SHOPLIFTING', 'AUTO THEFT', 
+                       'ASSAULT WITH INJURY', 'THEFT', 'CRIMINAL MISCHIEF', 'FAMILY DISTURBANCE', 
+                       'BURGLARY OF VEHICLE', 'HARASSMENT'], color ='lightseagreen', ci=None)
     plt.axhline(clearance_rate, label="Overall Clearance rate")
     plt.ylabel('Clearance Rate', fontsize=13)
     plt.xlabel('Crime Type', fontsize=13)
     plt.xticks(rotation = 45) #Rotating the xticks 45 degrees for readability
     plt.legend()
+    plt.show()
     None
+    
+def viz3(train):
+    '''
+    This function will take in the train dataset and return a seaborn 
+    visual of the council district and their crime count in descending order
+    '''
+    ax = sns.countplot(data = train, y = 'council_district',order = train['council_district']
+                       .value_counts(ascending = False).index, color ='lightseagreen')
+    plt.xlabel('Crime Count',fontsize=14)# set up the x axis. 
+    plt.ylabel('Council District',fontsize=14)# set up the y axis
+    plt.title('Crime Rate by Council District',fontsize=20) # set up the title.
+    plt.grid(color = 'lightgrey', linestyle = '-', linewidth = 0.5, alpha= 0.8)
+    plt.show()
+
+    return
+
+def viz4(train):
+    index = [8,6,10,5,7,2,1,3,4,9]
+    df1 = pd.DataFrame(train.groupby('council_district').cleared.mean(), index = index)
+    ax = df1.plot.barh()
+    plt.ylabel('Council District', fontsize = 14)
+    plt.xlabel('% cleared', fontsize = 14)
+    plt.title('Percentage of Cleared Cases in Each District', fontsize = 20)
+    plt.legend()
+    ax.get_legend().remove()
+    plt.grid(color = 'lightgrey', linestyle = '-', linewidth = 0.5, alpha= 0.8)
+    return 
 
 def viz5(train2):
     train2.groupby(['year', 'month']).crime_type.count().unstack(0).plot.line()
@@ -85,6 +125,7 @@ def viz5(train2):
     plt.ylabel("Number of Crimes")
     plt.tick_params('x', rotation=360)
     #plt.axhline(overall_mean,color="r")
+    plt.grid(color = 'lightgrey', linestyle = '-', linewidth = 0.5, alpha= 0.8)
     None
 
 def viz6(train2):
@@ -122,6 +163,19 @@ def t_test_ind(sample1, sample2, alternative = 'two-sided', alpha =.05):
         print('Since the P value is less than the alpha, we reject the null hypothesis.')
     else:
         print('Since the P value is greater than the alpha, we fail to reject the null hypothesis.')
+        
+def t_test_1sample(sample, overall_sample, alpha =.05):
+    t, p = stats.ttest_1samp(sample, overall_sample)
+    print(f'The t value between the two samples is {t:.4} and the P-Value is {p}.')
+    print('----------------------------------------------------------------------------')
+    if p/2 < alpha:
+        print('Since the P value halved is less than the alpha, we reject the null hypothesis.')
+    elif t < 0:
+        print("Since the T value is less than zero, we fail to reject null hypothesis")
+    if p/2 > alpha:
+        print("Since the P value is greater than the alpha, e fail to reject null hypothesis.")
+    
+    
 
 def chi2(variable, target, alpha=.05):
     observed = pd.crosstab(variable, target)
