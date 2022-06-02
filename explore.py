@@ -65,6 +65,35 @@ def friday_subsets(time_series_df):
     
     return subset_friday, subset_not_friday
 
+# Create a dataframe that is prepare for time-series analysis on crime reporting time
+
+def report_time_df(train):
+    # Calculate a time_to_report feature
+    report_time_df = train.copy()
+    report_time_df['time_to_report'] = report_time_df.report_time - report_time_df.occurrence_time
+    report_time_df['time_to_report_bins'] = pd.cut(
+    report_time_df.time_to_report,
+    [
+        pd.Timedelta('-1d'),
+        pd.Timedelta('59s'),
+        pd.Timedelta('59m'),
+        pd.Timedelta('6h'),
+        pd.Timedelta('1d'),
+        pd.Timedelta('7d'),
+        pd.Timedelta('10y')
+    ],
+    labels = [
+        'No difference',
+        '1 minute - 1 hour',
+        '1 hour - 6 hours',
+        '6 hours - 1 day',
+        '1 day - 1 week',
+        'Greater than 1 week'
+    ])
+    
+    return report_time_df
+    
+
 # Visualizations for Final Notebook
 
 
