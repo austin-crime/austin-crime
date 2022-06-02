@@ -11,21 +11,21 @@ ___
 
 ## Table of Contents
 
-I. [Project Summary](#i-project-summary)<br>
-II. [Project Planning](#ii-project-planning)<br>
-    [1. Project Goals](#ii-project-goals)<br>
-    [2. Business Goals](#iii-gusiness-goals)<br>
-    [3. Project Description](#i-project-description)<br>
-III. [Data Dictionary](#iii-data-dictionary)<br>
-IV. [Outline of Project Plan](#iv-outline-of-project-plan)<br>
-    [1. Project Plan](#1-plan)<br>
-    [2. Data Acquisition](#2-acquire)<br>
-    [3. Data Preparation](#3-prepare)<br>
-    [4. Data Exploration](#4-explore)<br>
-    [5. Modeling & Evaluation](#5-model)<br>
-    [6. Product Delivery](#6-deliver)<br>
-V. [Conclusion](#v-conclusion)<br>
-VI. [Instructions For Recreating This Project](#vi-instructions-for-recreating-this-project)<br>
+- I. [Project Summary](#i-project-summary)<br>
+- II. [Project Planning](#ii-project-planning)<br>
+    - [1. Project Goals](#ii-project-goals)<br>
+    - [2. Business Goals](#iii-gusiness-goals)<br>
+    - [3. Project Description](#i-project-description)<br>
+- III. [Data Dictionary](#iii-data-dictionary)<br>
+- IV. [Outline of Project Plan](#iv-outline-of-project-plan)<br>
+    - [1. Project Plan](#1-plan)<br>
+    - [2. Data Acquisition](#2-acquire)<br>
+    - [3. Data Preparation](#3-prepare)<br>
+    - [4. Data Exploration](#4-explore)<br>
+    - [5. Modeling & Evaluation](#5-model)<br>
+    - [6. Product Delivery](#6-deliver)<br>
+- V. [Conclusion](#v-conclusion)<br>
+- VI. [Instructions For Recreating This Project](#vi-instructions-for-recreating-this-project)<br>
 
 ___
 
