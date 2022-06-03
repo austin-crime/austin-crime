@@ -14,15 +14,19 @@ top_10_crimes = ['DWI', 'ASSAULT WITH INJURY', 'THEFT BY SHOPLIFTING', 'HARASSME
 
 # Create a subsetted df that only uses the top 10 crimes
 def subset_top_crimes(train):
+    '''
+    This function will take in a dataframe, use the top 10 crimes list above and 
+    return the new dataframe with all the records with just the list of crimes above.
+    '''
     top_crimes_df = train.copy()
     top_crimes_df = top_crimes_df[top_crimes_df.crime_type.isin(top_10_crimes)]
     return top_crimes_df
 
 def plot_cleared(df):
-    plt.title("Distribution of Clearance", fontsize=15)
+    plt.title("Distribution of Clearance")
     sns.countplot(y="cleared", data=df)
-    plt.ylabel('Cleared', fontsize=12)
-    plt.xlabel('Clearance Rate', fontsize=12)
+    plt.ylabel('Cleared')
+    plt.xlabel('Clearance Rate')
     plt.show()
     
 # Create subsetted dfs with caseloads for all districts, the highest caseload district and the lowest caseload district
@@ -39,6 +43,11 @@ def subset_districts(train):
 # Create a data frame for time-series analysis
 
 def time_series_df(train):
+    '''
+    This function will create a copy of a train dataframe and then
+    set the occurence date as the index in order to create new feature for weekdays, months and years
+    and then change weekdays and months into catergoical variables
+    '''
     train2 = train.copy()
     train2 = train2.set_index('occurrence_date').sort_index()
     #Split by month first
@@ -57,6 +66,10 @@ def time_series_df(train):
 
 # Create subsets of data only including Friday or not including Friday for an independent t-test
 def friday_subsets(time_series_df):
+    '''
+    This function will create 2 subset of data: 1 will be just friday only 
+    and the other is exclude friday 
+    '''
     friday_only = ['Friday']
     subset_friday = time_series_df.copy()
     subset_friday = subset_friday[subset_friday.weekdays.isin(friday_only)]
@@ -68,6 +81,9 @@ def friday_subsets(time_series_df):
 # Create a dataframe that is prepare for time-series analysis on crime reporting time
 
 def report_time_df(train):
+    '''
+    This function will take in a dataframe and then create 6 bins base on time_to_report
+    '''
     # Calculate a time_to_report feature
     report_time_df = train.copy()
     report_time_df['time_to_report'] = report_time_df.report_time - report_time_df.occurrence_time
@@ -100,6 +116,9 @@ def report_time_df(train):
 
 
 def viz1(top_crimes_df): 
+    '''
+    This function will create a percentage pie chart to show top 10 crimes
+    '''
     top_crimes_df.crime_type.value_counts().plot(kind='pie', y='cleared', autopct="%1.1f%%")
     # remove y axis label
     plt.ylabel(None)
@@ -108,6 +127,9 @@ def viz1(top_crimes_df):
     plt.show()
         
 def viz2(top_crimes_df, train):
+    '''
+    This fucntion will create a bar chart to visual the relationship between target and the features
+    '''
     plt.title("Relationship Between Crime Type and Clearance Rate")
     top_crimes_df.groupby('crime_type').cleared.mean().sort_values(ascending=False).plot.bar()
     # calculating overall clearance rate
@@ -126,27 +148,35 @@ def viz3(train):
     '''
     ax = sns.countplot(data = train, y = 'council_district',order = train['council_district']
                        .value_counts(ascending = False).index, color ='lightseagreen')
-    plt.xlabel('Crime Count',fontsize=14)# set up the x axis. 
-    plt.ylabel('Council District',fontsize=14)# set up the y axis
-    plt.title('Crime Rate by Council District',fontsize=20) # set up the title.
+    plt.xlabel('Crime Count')# set up the x axis. 
+    plt.ylabel('Council District')# set up the y axis
+    plt.title('Crime Rate by Council District') # set up the title.
     plt.grid(color = 'lightgrey', linestyle = '-', linewidth = 0.5, alpha= 0.8)
     plt.show()
 
     return
 
 def viz4(train):
+    '''
+    This function will create a horizontal bar chart to visual 
+    the percentage of crimes in each council districts
+    '''
     index = [8,6,10,5,7,2,1,3,4,9]
     df1 = pd.DataFrame(train.groupby('council_district').cleared.mean(), index = index)
     ax = df1.plot.barh()
-    plt.ylabel('Council District', fontsize = 14)
-    plt.xlabel('% cleared', fontsize = 14)
-    plt.title('Percentage of Cleared Cases in Each District', fontsize = 20)
+    plt.ylabel('Council District')
+    plt.xlabel('% cleared')
+    plt.title('Percentage of Cleared Cases in Each District')
     plt.legend()
     ax.get_legend().remove()
     plt.grid(color = 'lightgrey', linestyle = '-', linewidth = 0.5, alpha= 0.8)
     return 
 
 def viz5(train2):
+    '''
+    This function will create a line plot base on year and month 
+    and total number of crime types
+    '''
     train2.groupby(['year', 'month']).crime_type.count().unstack(0).plot.line()
     plt.title("Crime Frequency by Year")
     plt.xlabel("Months")
@@ -157,27 +187,30 @@ def viz5(train2):
     None
 
 def viz6(train2):
+    '''
+    This function will create a bar chart to visualize the total number of crimes 
+    and then put the weekdays into categorical so the chart in order from Monday to Sunday
+    '''
     y = train2.groupby(['weekdays','year'])['crime_type'].count()
     #Take a look at all the crime types
-    train2['weekdays'] = pd.Categorical(train2['weekdays'], categories=['Monday', 'Tuesday', 'Wednesday', 
-                                                                        'Thursday', 'Friday', 'Saturday','Sunday'])
-    #overall_mean = df.groupby('month').crime_type.value_counts()
-    #Assuming 0 = Sunday, 1 = Monday, 2 = Tuesday, 3 = Wednesday, 4 = Thursday, 5 = Friday, 6 =Saturday
     y.unstack(0).plot.bar()
     #sns.barplot(x=None, y = y, data = y, ci = None)
-    plt.title("Crime Frequency by Weekday")
-    plt.xlabel("Weekdays")
+    plt.title("Crime Frequency by Weekdays")
+    plt.xlabel("Years")
     plt.ylabel("Number of Crimes")
     plt.tick_params('x', rotation=360)
     #plt.axhline(overall_mean,color="r")
     None
     
 def viz7(report_time_df):
+    '''
+    This fucntion will create a barplot for each bin of time to report
+    '''
     sns.barplot(data = report_time_df, x = 'time_to_report_bins', y = 'cleared', ci = None)
     plt.xticks(rotation = 15)
-    plt.xlabel('Time to report', fontsize=12)
-    plt.ylabel('Percentage of cases cleared', fontsize=12)
-    plt.title('The sooner a crime is reported the more likely it is to be solved.', fontsize=15)
+    plt.xlabel('Time to report')
+    plt.ylabel('Percentage of cases cleared')
+    plt.title('The sooner a crime is reported the more likely it is to be solved.')
     plt.show()
     
 #Statistical analysis 
@@ -211,8 +244,6 @@ def t_test_1sample(sample, overall_sample, alpha =.05):
     if p/2 > alpha:
         print("Since the P value is greater than the alpha, e fail to reject null hypothesis.")
     
-    
-
 def chi2(variable, target, alpha=.05):
     observed = pd.crosstab(variable, target)
     chi2, p, degf, expected = stats.chi2_contingency(observed)
@@ -264,6 +295,7 @@ def explore_bivariate(train, target, cat_vars, quant_vars):
 
 def explore_multivariate(train, target, cat_vars, quant_vars):
     '''
+    This function will create 3 plot: swram plot, violin plot and pairplot
     '''
     plot_swarm_grid_with_color(train, target, cat_vars, quant_vars)
     plt.show()
@@ -278,14 +310,20 @@ def explore_multivariate(train, target, cat_vars, quant_vars):
 ### Univariate
 
 def plot_distributions(df):
+    '''
+    This function will create a histogram for each item in a column
+    '''
     for col in df.columns:
         sns.histplot(x = col, data=df)
         plt.title(col)
         plt.show()
 
 def plot_distribution(df, var):
+    '''
+    This function will create a histogram too look overall 
+    '''
     sns.histplot(x = var, data=df)
-    plt.title(f'Distribution of {var}', fontsize=15)
+    plt.title(f'Distribution of {var}')
     plt.show()
     
 def get_box(df, cols):
@@ -408,6 +446,9 @@ def explore_bivariate_quant(train, target, quant_var):
 
 
 def plot_cat_by_target(train, target, cat_var):
+    '''
+    Create a barplot
+    '''
     p = plt.figure(figsize=(2,2))
     p = sns.barplot(cat_var, target, data=train, alpha=.8, color='lightseagreen')
     overall_rate = train[target].mean()
@@ -418,6 +459,9 @@ def plot_cat_by_target(train, target, cat_var):
 ## Bivariate Quant
 
 def plot_swarm(train, target, quant_var):
+    '''
+    Create a swram plot
+    '''
     average = train[quant_var].mean()
     p = sns.swarmplot(data=train, x=target, y=quant_var, color='lightgray')
     p = plt.title(quant_var)
@@ -425,6 +469,9 @@ def plot_swarm(train, target, quant_var):
     return p
 
 def plot_boxen(train, target, quant_var):
+    '''
+    Create a boxen plot
+    '''
     average = train[quant_var].mean()
     p = sns.boxenplot(data=train, x=target, y=quant_var, color='lightseagreen')
     p = plt.title(quant_var)
@@ -432,15 +479,21 @@ def plot_boxen(train, target, quant_var):
     return p
 
 def plot_bar(train, cat_var, quant_var):
+    '''
+    Create a barplot
+    '''
     average = train[quant_var].mean()
     p = sns.barplot(data=train, x=cat_var, y=quant_var, palette='Set1')
-    p = plt.title(f'Relationship between {cat_var} and {quant_var}.', fontsize=15)
+    p = plt.title(f'Relationship between {cat_var} and {quant_var}.')
     p = plt.axhline(average, ls='--', color='black')
     return p
 
 # alt_hyp = ‘two-sided’, ‘less’, ‘greater’
 
 def compare_means(train, target, quant_var, alt_hyp='two-sided'):
+    '''
+    This function will peforma manwhitenyu stat test 
+    '''
     x = train[train[target]==0][quant_var]
     y = train[train[target]==1][quant_var]
     return stats.mannwhitneyu(x, y, use_continuity=True, alternative=alt_hyp)
@@ -450,9 +503,12 @@ def compare_means(train, target, quant_var, alt_hyp='two-sided'):
 
 #Function to visualize correlations
 def plot_correlations(df):
+    '''
+    This function will compare correlations between the target and features
+    '''
     plt.figure(figsize= (15, 8))
     df.corr()['cleared'].sort_values(ascending=False).plot(kind='bar', color = 'darkcyan')
-    plt.title('Correlations with Clearance', fontsize = 18)
+    plt.title('Correlations with Clearance')
     plt.xlabel('Features')
     plt.ylabel('Correlation')
     plt.show()
@@ -471,9 +527,14 @@ def plot_all_continuous_vars(train, target, quant_vars):
     plt.show()
 
 def plot_violin_grid_with_color(train, target, cat_vars, quant_vars):
+    '''
+    This fucntion will create a violin plot
+    '''
     cols = len(cat_vars)
     for quant in quant_vars:
         _, ax = plt.subplots(nrows=1, ncols=cols, figsize=(16, 4), sharey=True)
+        # Enumerate() method adds a counter to an iterable 
+        # and returns it in a form of enumerating object.
         for i, cat in enumerate(cat_vars):
             sns.violinplot(x=cat, y=quant, data=train, split=True, 
                            ax=ax[i], hue=target, palette="Set2")
@@ -483,10 +544,15 @@ def plot_violin_grid_with_color(train, target, cat_vars, quant_vars):
         plt.show()
 
 def plot_swarm_grid_with_color(train, target, cat_vars, quant_vars):
-    cols = len(cat_vars)
+    '''
+    This function will create a swram plot
+    '''
+    cols = len(cat_vars) #Checking the length 
     for quant in quant_vars:
         _, ax = plt.subplots(nrows=1, ncols=cols, figsize=(16, 4), sharey=True)
-        for i, cat in enumerate(cat_vars):
+        # Enumerate() method adds a counter to an iterable 
+        # and returns it in a form of enumerating object.
+        for i, cat in enumerate(cat_vars): 
             sns.swarmplot(x=cat, y=quant, data=train, ax=ax[i], hue=target, palette="Set2")
             ax[i].set_xlabel('')
             ax[i].set_ylabel(quant)
