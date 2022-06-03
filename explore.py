@@ -19,83 +19,11 @@ def subset_top_crimes(train):
     return top_crimes_df
 
 def plot_cleared(df):
-    plt.title("Distribution of Clearance", fontsize=15)
+    plt.title("Distribution of Clearance")
     sns.countplot(y="cleared", data=df)
-    plt.ylabel('Cleared', fontsize=12)
-    plt.xlabel('Clearance Rate', fontsize=12)
+    plt.ylabel('Cleared')
+    plt.xlabel('Clearance Rate')
     plt.show()
-    
-# Create subsetted dfs with caseloads for all districts, the highest caseload district and the lowest caseload district
-
-def subset_districts(train):
-    train2 = train.copy()
-    train2['counts'] = train2.groupby(['council_district'])['crime_type'].transform('count')
-    overall_sample = train2.groupby('council_district').council_district.count().mean()
-    nine_sample = train2[train2.council_district == 9].counts
-    eight_sample = train2[train2.council_district == 8].counts
-    
-    return overall_sample, nine_sample, eight_sample
-    
-# Create a data frame for time-series analysis
-
-def time_series_df(train):
-    train2 = train.copy()
-    train2 = train2.set_index('occurrence_date').sort_index()
-    #Split by month first
-    train2['month'] = train2.index.month_name()
-    #Split by weekdays
-    train2['weekdays'] = train2.index.day_name()
-    #Split by year
-    train2['year'] = train2.index.year
-    # Order the weekdays correctly
-    train2['weekdays'] = pd.Categorical(train2['weekdays'], categories=['Monday', 'Tuesday', 'Wednesday', 'Thursday', 
-                                                                        'Friday', 'Saturday', 'Sunday'])
-    # Order the months correctly
-    train2['month'] = pd.Categorical(train2['month'], categories=['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August',
-                                                            'September','October', 'November', 'December'])
-    return train2
-
-# Create subsets of data only including Friday or not including Friday for an independent t-test
-def friday_subsets(time_series_df):
-    friday_only = ['Friday']
-    subset_friday = time_series_df.copy()
-    subset_friday = subset_friday[subset_friday.weekdays.isin(friday_only)]
-    subset_not_friday = time_series_df.copy()
-    subset_not_friday = subset_not_friday[~subset_not_friday.weekdays.isin(friday_only)]#Without friday
-    
-    return subset_friday, subset_not_friday
-
-# Create a dataframe that is prepare for time-series analysis on crime reporting time
-
-def report_time_df(train):
-    # Calculate a time_to_report feature
-    report_time_df = train.copy()
-    report_time_df['time_to_report'] = report_time_df.report_time - report_time_df.occurrence_time
-    report_time_df['time_to_report_bins'] = pd.cut(
-    report_time_df.time_to_report,
-    [
-        pd.Timedelta('-1d'),
-        pd.Timedelta('59s'),
-        pd.Timedelta('59m'),
-        pd.Timedelta('6h'),
-        pd.Timedelta('1d'),
-        pd.Timedelta('7d'),
-        pd.Timedelta('10y')
-    ],
-    labels = [
-        'No difference',
-        '1 minute - 1 hour',
-        '1 hour - 6 hours',
-        '6 hours - 1 day',
-        '1 day - 1 week',
-        'Greater than 1 week'
-    ])
-    
-    return report_time_df
-    
-
-# Visualizations for Final Notebook
-
 
 def viz1(top_crimes_df): 
     top_crimes_df.crime_type.value_counts().plot(kind='pie', y='cleared', autopct="%1.1f%%")
@@ -106,73 +34,17 @@ def viz1(top_crimes_df):
     plt.show()
         
 def viz2(top_crimes_df, train):
+    plt.title("Relationship Between Crime Type and Clearance Rate")
+    top_crimes_df.groupby('crime_type').cleared.mean().sort_values(ascending=False).plot.bar()
+    # calculating overall clearance rate
     clearance_rate = train.cleared.mean()
-    plt.title("Relationship Between Crime Type and Clearance Rate", fontsize=20)
-    sns.barplot(x="crime_type", y="cleared", data=top_crimes_df,
-                order=['DWI', 'ASSAULT W/INJURY-FAM/DATE VIOL', 'THEFT BY SHOPLIFTING', 'AUTO THEFT', 
-                       'ASSAULT WITH INJURY', 'THEFT', 'CRIMINAL MISCHIEF', 'FAMILY DISTURBANCE', 
-                       'BURGLARY OF VEHICLE', 'HARASSMENT'], color ='lightseagreen', ci=None)
-    plt.axhline(clearance_rate, label="Overall Clearance rate")
-    plt.ylabel('Clearance Rate', fontsize=13)
-    plt.xlabel('Crime Type', fontsize=13)
-    plt.xticks(rotation = 45) #Rotating the xticks 45 degrees for readability
+    plt.axhline(clearance_rate, label="Overall Clearance rate", linestyle = '--', c = '#45b6ef')
+    plt.ylabel('Clearance Rate')
+    #plt.gca().axes.get_xaxis().set_visible(False)
+    plt.xticks(rotation = 90) #Rotating the xticks 35 degrees for readability
     plt.legend()
-    plt.show()
-    None
-    
-def viz3(train):
-    '''
-    This function will take in the train dataset and return a seaborn 
-    visual of the council district and their crime count in descending order
-    '''
-    ax = sns.countplot(data = train, y = 'council_district',order = train['council_district']
-                       .value_counts(ascending = False).index, color ='lightseagreen')
-    plt.xlabel('Crime Count',fontsize=14)# set up the x axis. 
-    plt.ylabel('Council District',fontsize=14)# set up the y axis
-    plt.title('Crime Rate by Council District',fontsize=20) # set up the title.
-    plt.grid(color = 'lightgrey', linestyle = '-', linewidth = 0.5, alpha= 0.8)
-    plt.show()
-
-    return
-
-def viz4(train):
-    index = [8,6,10,5,7,2,1,3,4,9]
-    df1 = pd.DataFrame(train.groupby('council_district').cleared.mean(), index = index)
-    ax = df1.plot.barh()
-    plt.ylabel('Council District', fontsize = 14)
-    plt.xlabel('% cleared', fontsize = 14)
-    plt.title('Percentage of Cleared Cases in Each District', fontsize = 20)
-    plt.legend()
-    ax.get_legend().remove()
-    plt.grid(color = 'lightgrey', linestyle = '-', linewidth = 0.5, alpha= 0.8)
-    return 
-
-def viz5(train2):
-    train2.groupby(['year', 'month']).crime_type.count().unstack(0).plot.line()
-    plt.title("Crime Frequency by Year")
-    plt.xlabel("Months")
-    plt.ylabel("Number of Crimes")
-    plt.tick_params('x', rotation=360)
-    #plt.axhline(overall_mean,color="r")
-    plt.grid(color = 'lightgrey', linestyle = '-', linewidth = 0.5, alpha= 0.8)
     None
 
-def viz6(train2):
-    y = train2.groupby(['weekdays','year'])['crime_type'].count()
-    #Take a look at all the crime types
-    train2['weekdays'] = pd.Categorical(train2['weekdays'], categories=['Monday', 'Tuesday', 'Wednesday', 
-                                                                        'Thursday', 'Friday', 'Saturday','Sunday'])
-    #overall_mean = df.groupby('month').crime_type.value_counts()
-    #Assuming 0 = Sunday, 1 = Monday, 2 = Tuesday, 3 = Wednesday, 4 = Thursday, 5 = Friday, 6 =Saturday
-    y.unstack(0).plot.bar()
-    #sns.barplot(x=None, y = y, data = y, ci = None)
-    plt.title("Crime Frequency by Weekday")
-    plt.xlabel("Weekdays")
-    plt.ylabel("Number of Crimes")
-    plt.tick_params('x', rotation=360)
-    #plt.axhline(overall_mean,color="r")
-    None
-    
 #Statistical analysis 
 
 def pearsonr(variable, target, alpha =.05):
@@ -192,19 +64,6 @@ def t_test_ind(sample1, sample2, alternative = 'two-sided', alpha =.05):
         print('Since the P value is less than the alpha, we reject the null hypothesis.')
     else:
         print('Since the P value is greater than the alpha, we fail to reject the null hypothesis.')
-        
-def t_test_1sample(sample, overall_sample, alpha =.05):
-    t, p = stats.ttest_1samp(sample, overall_sample)
-    print(f'The t value between the two samples is {t:.4} and the P-Value is {p}.')
-    print('----------------------------------------------------------------------------')
-    if p/2 < alpha:
-        print('Since the P value halved is less than the alpha, we reject the null hypothesis.')
-    elif t < 0:
-        print("Since the T value is less than zero, we fail to reject null hypothesis")
-    if p/2 > alpha:
-        print("Since the P value is greater than the alpha, e fail to reject null hypothesis.")
-    
-    
 
 def chi2(variable, target, alpha=.05):
     observed = pd.crosstab(variable, target)
@@ -278,7 +137,7 @@ def plot_distributions(df):
 
 def plot_distribution(df, var):
     sns.histplot(x = var, data=df)
-    plt.title(f'Distribution of {var}', fontsize=15)
+    plt.title(f'Distribution of {var}')
     plt.show()
     
 def get_box(df, cols):
@@ -427,7 +286,7 @@ def plot_boxen(train, target, quant_var):
 def plot_bar(train, cat_var, quant_var):
     average = train[quant_var].mean()
     p = sns.barplot(data=train, x=cat_var, y=quant_var, palette='Set1')
-    p = plt.title(f'Relationship between {cat_var} and {quant_var}.', fontsize=15)
+    p = plt.title(f'Relationship between {cat_var} and {quant_var}.')
     p = plt.axhline(average, ls='--', color='black')
     return p
 
@@ -445,7 +304,7 @@ def compare_means(train, target, quant_var, alt_hyp='two-sided'):
 def plot_correlations(df):
     plt.figure(figsize= (15, 8))
     df.corr()['cleared'].sort_values(ascending=False).plot(kind='bar', color = 'darkcyan')
-    plt.title('Correlations with Clearance', fontsize = 18)
+    plt.title('Correlations with Clearance')
     plt.xlabel('Features')
     plt.ylabel('Correlation')
     plt.show()
