@@ -126,20 +126,23 @@ def viz1(top_crimes_df):
     plt.title('Top 10 Crimes as Percentage of Overall Crime Rate in Subset')
     plt.show()
         
+    
 def viz2(top_crimes_df, train):
     '''
     This fucntion will create a bar chart to visual the relationship between target and the features
     '''
-    plt.title("Relationship Between Crime Type and Clearance Rate")
-    top_crimes_df.groupby('crime_type').cleared.mean().sort_values(ascending=False).plot.bar()
-    # calculating overall clearance rate
+    # Calculate overall clearance rate
     clearance_rate = train.cleared.mean()
-    plt.axhline(clearance_rate, label="Overall Clearance rate", linestyle = '--', c = '#45b6ef')
-    plt.ylabel('Clearance Rate')
-    #plt.gca().axes.get_xaxis().set_visible(False)
-    plt.xticks(rotation = 90) #Rotating the xticks 35 degrees for readability
+    plt.title("Relationship Between Crime Type and Clearance Rate", fontsize=20)
+    sns.barplot(x="cleared", y="crime_type", data=top_crimes_df,
+            order=['DWI', 'ASSAULT W/INJURY-FAM/DATE VIOL', 'THEFT BY SHOPLIFTING', 'AUTO THEFT', 
+                   'ASSAULT WITH INJURY', 'THEFT', 'CRIMINAL MISCHIEF', 'FAMILY DISTURBANCE', 
+                   'BURGLARY OF VEHICLE', 'HARASSMENT'], color ='royalblue', ci=None)
+    plt.axvline(clearance_rate, label="Overall Clearance rate", linestyle = '--', alpha=.8, color='orange')
+    plt.ylabel('Crime Type', fontsize=13)
+    plt.xlabel('Clearance Rate', fontsize=13)
     plt.legend()
-    None
+    plt.show()
 
 def viz3(train):
     '''
@@ -147,7 +150,7 @@ def viz3(train):
     visual of the council district and their crime count in descending order
     '''
     ax = sns.countplot(data = train, y = 'council_district',order = train['council_district']
-                       .value_counts(ascending = False).index, color ='lightseagreen')
+                       .value_counts(ascending = False).index, color ='royalblue')
     plt.xlabel('Crime Count')# set up the x axis. 
     plt.ylabel('Council District')# set up the y axis
     plt.title('Crime Rate by Council District') # set up the title.
