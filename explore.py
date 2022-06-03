@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+import matplotlib as mpl
 import seaborn as sns
 from sklearn.model_selection import train_test_split
 from scipy import stats
@@ -133,14 +134,15 @@ def viz2(top_crimes_df, train):
     '''
     # Calculate overall clearance rate
     clearance_rate = train.cleared.mean()
-    plt.title("Relationship Between Crime Type and Clearance Rate", fontsize=20)
+    plt.title("Relationship Between Crime Type and Clearance Rate")
     sns.barplot(x="cleared", y="crime_type", data=top_crimes_df,
             order=['DWI', 'ASSAULT W/INJURY-FAM/DATE VIOL', 'THEFT BY SHOPLIFTING', 'AUTO THEFT', 
                    'ASSAULT WITH INJURY', 'THEFT', 'CRIMINAL MISCHIEF', 'FAMILY DISTURBANCE', 
                    'BURGLARY OF VEHICLE', 'HARASSMENT'], color ='royalblue', ci=None)
     plt.axvline(clearance_rate, label="Overall Clearance rate", linestyle = '--', alpha=.8, color='orange')
-    plt.ylabel('Crime Type', fontsize=13)
-    plt.xlabel('Clearance Rate', fontsize=13)
+    plt.ylabel('Crime Type')
+    plt.xlabel('Clearance Rate')
+    #plt.gca().xaxis.set_major_formatter(mpl.ticker.FuncFormatter('{:.0%}'.format))
     plt.legend()
     plt.show()
 
@@ -173,6 +175,7 @@ def viz4(train):
     plt.legend()
     ax.get_legend().remove()
     plt.grid(color = 'lightgrey', linestyle = '-', linewidth = 0.5, alpha= 0.8)
+    plt.gca().xaxis.set_major_formatter(mpl.ticker.FuncFormatter('{:.0%}'.format))
     return 
 
 def viz5(train2):
@@ -185,7 +188,7 @@ def viz5(train2):
     plt.xlabel("Months")
     plt.ylabel("Number of Crimes")
     plt.tick_params('x', rotation=360)
-    #plt.axhline(overall_mean,color="r")
+    plt.legend(bbox_to_anchor= (1.16,1))
     plt.grid(color = 'lightgrey', linestyle = '-', linewidth = 0.5, alpha= 0.8)
     None
 
@@ -202,7 +205,7 @@ def viz6(train2):
     plt.xlabel("Years")
     plt.ylabel("Number of Crimes")
     plt.tick_params('x', rotation=360)
-    #plt.axhline(overall_mean,color="r")
+    plt.legend(bbox_to_anchor= (1.03,1))
     None
     
 def viz7(report_time_df):
