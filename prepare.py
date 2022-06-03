@@ -29,7 +29,7 @@ def handle_missing_values(df, prop_required_column = .5, prop_required_row = .75
     return df
 
 
-def split_data(df):
+def split_data(df, stratify):
 
     """
     This function takes in a dataframe, then splits and returns the data as train, validate, and test sets 
@@ -37,14 +37,14 @@ def split_data(df):
     """
     # split data into 2 groups, train_validate and test, assigning test as 20% of the dataset
     train_validate, test = train_test_split(
-        df, test_size=0.2, random_state=42, stratify=df["cleared"]
+        df, test_size=0.2, random_state=42, stratify=df[stratify]
     )
     # split train_validate into 2 groups with
     train, validate = train_test_split(
         train_validate,
         test_size=0.3,
         random_state=42,
-        stratify=train_validate["cleared"],
+        stratify=train_validate[stratify],
     )
     return train, validate, test
 
