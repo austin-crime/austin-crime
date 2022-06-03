@@ -5,9 +5,18 @@
     Description: This file contains functions used for producing machine learning 
         models for the Austin Crime project.
 
+    Variables:
+
+        random_seed
+
+    Classes:
+
+        Model(self, model, train, features, target)
+
     Functions:
 
         prep_data_for_modeling(df)
+        train_models(train)
 
 '''
 
@@ -15,6 +24,13 @@
 
 import numpy as np
 import pandas as pd
+
+from sklearn.ensemble import AdaBoostClassifier, BaggingClassifier
+from sklearn.naive_bayes import BernoulliNB
+
+################################################################################
+
+random_seed = 42
 
 ################################################################################
 
@@ -119,3 +135,28 @@ def prep_data_for_modeling(df: pd.DataFrame) -> pd.DataFrame:
     df['time_to_report'] = df.time_to_report / np.timedelta64(1, 's')
 
     return df
+
+################################################################################
+
+def train_models(train: pd.DataFrame) -> dict:
+    '''
+        Build and train machine learning models for the final report.
+    '''
+
+    algorithms = {
+        'Ada Boost' : AdaBoostClassifier(random_state = random_seed),
+        'Bagging Classifier' : BaggingClassifier(random_state = random_seed),
+        'Naive Bayes' : BernoulliNB()
+    }
+
+    models = {}
+
+    for key, algorithm in algorithms.items():
+        models[key] = Model(
+            algorithm,
+            train = train,
+            features = train.drop(columns = 'cleared').columns,
+            target = 'cleared'
+        )
+
+    return models
