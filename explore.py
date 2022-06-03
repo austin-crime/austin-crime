@@ -108,20 +108,17 @@ def viz1(top_crimes_df):
     plt.show()
         
 def viz2(top_crimes_df, train):
+    plt.title("Relationship Between Crime Type and Clearance Rate")
+    top_crimes_df.groupby('crime_type').cleared.mean().sort_values(ascending=False).plot.bar()
+    # calculating overall clearance rate
     clearance_rate = train.cleared.mean()
-    plt.title("Relationship Between Crime Type and Clearance Rate", fontsize=20)
-    sns.barplot(x="crime_type", y="cleared", data=top_crimes_df,
-                order=['DWI', 'ASSAULT W/INJURY-FAM/DATE VIOL', 'THEFT BY SHOPLIFTING', 'AUTO THEFT', 
-                       'ASSAULT WITH INJURY', 'THEFT', 'CRIMINAL MISCHIEF', 'FAMILY DISTURBANCE', 
-                       'BURGLARY OF VEHICLE', 'HARASSMENT'], color ='lightseagreen', ci=None)
-    plt.axhline(clearance_rate, label="Overall Clearance rate")
-    plt.ylabel('Clearance Rate', fontsize=13)
-    plt.xlabel('Crime Type', fontsize=13)
-    plt.xticks(rotation = 45) #Rotating the xticks 45 degrees for readability
+    plt.axhline(clearance_rate, label="Overall Clearance rate", linestyle = '--', c = '#45b6ef')
+    plt.ylabel('Clearance Rate')
+    #plt.gca().axes.get_xaxis().set_visible(False)
+    plt.xticks(rotation = 90) #Rotating the xticks 35 degrees for readability
     plt.legend()
-    plt.show()
     None
-    
+
 def viz3(train):
     '''
     This function will take in the train dataset and return a seaborn 
