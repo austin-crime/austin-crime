@@ -90,6 +90,8 @@ def report_time_df(train):
         '1 day - 1 week',
         'Greater than 1 week'
     ])
+    report_time_df['time_to_report_less_than_6hrs'] = report_time_df.time_to_report <= pd.Timedelta('6h')
+    report_time_df['time_to_report_greater_than_6hrs'] = report_time_df.time_to_report > pd.Timedelta('6h')
     
     return report_time_df
     
@@ -172,6 +174,14 @@ def viz6(train2):
     plt.tick_params('x', rotation=360)
     #plt.axhline(overall_mean,color="r")
     None
+    
+def viz7(report_time_df):
+    sns.barplot(data = report_time_df, x = 'time_to_report_bins', y = 'cleared', ci = None)
+    plt.xticks(rotation = 15)
+    plt.xlabel('Time to report', fontsize=12)
+    plt.ylabel('Percentage of cases cleared', fontsize=12)
+    plt.title('The sooner a crime is reported the more likely it is to be solved.', fontsize=15)
+    plt.show()
     
 #Statistical analysis 
 
