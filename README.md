@@ -31,7 +31,9 @@ ___
 
 ## I. Project Summary
 
-<i>Pending</i>
+This project analyzes crime data from the city of Austin for the years 2018 through 2021. The goal of the project was to develop a deeper understanding of the factors that drive crime in Austin, TX and the indicators of whether or not a particular case will be solved/cleared. Using exploratory visualizations and statistical analysis we investigated several indicators of clearance such as crime type, location, seasonality, and timeliness of the report. Ultimately, we found all of these to be important indicators of clearance and built a predictive classification model using a Naive Bayes algorthim that can predit clearance status on unseen data with an accuracy of 89% and ROC-AUC Score of .81. This accuracy outperforms the baseline by ~ 11%.
+
+</details>
 
 ___
 
@@ -215,7 +217,7 @@ ___
 
 <details><summary><i>Click to expand</i></summary>
 
-<i>Pending</i>
+Our exploratory data analysis provided several key insights surrounding the factors that drive crime and whether or not a case gets cleared. We identified that several of the top crimes in terms of frequency are also the lowest in terms of clearance rate. We identified disproportionate levels of crime in certain council districts, clear seasonal trends, and the importance of timely reporting in ensuring a case gets cleared. Our best performing model was a Naive Bayes model that can predict case clearance with 89% accuraccy and a ROC-AUC score of .81 significant outperforming the baseline. We hope our insights and predictive model can be used to guide policy making and allocation of resources towards improving public saftery outcomes in Austin, TX. 
 
 </details>
 
