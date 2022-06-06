@@ -30,7 +30,7 @@ def handle_missing_values(df, prop_required_column = .5, prop_required_row = .75
 
 
 #Split the data into train, validate and test to ensure the data not leakage 
-def split_data(df, target = 'cleared', seed = 123):
+def split_data(df, target = 'cleared', seed = 911):
     '''
     This function takes in a dataframe, the name of the target variable
     (for stratification purposes), and an integer for a setting a seed
