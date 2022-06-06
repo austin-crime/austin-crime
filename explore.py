@@ -142,7 +142,7 @@ def viz2(top_crimes_df, train):
     plt.axvline(clearance_rate, label="Overall Clearance rate", linestyle = '--', alpha=.8, color='orange')
     plt.ylabel('Crime Type')
     plt.xlabel('Clearance Rate')
-    #plt.gca().xaxis.set_major_formatter(mpl.ticker.FuncFormatter('{:.0%}'.format))
+    plt.gca().xaxis.set_major_formatter(mpl.ticker.FuncFormatter('{:.0%}'.format))
     plt.legend()
     plt.show()
 
