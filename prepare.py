@@ -30,7 +30,7 @@ def handle_missing_values(df, prop_required_column = .5, prop_required_row = .75
 
 
 #Split the data into train, validate and test to ensure the data not leakage 
-def split_data(df, target, seed=123):
+def split_data(df, target = 'cleared', seed = 123):
     '''
     This function takes in a dataframe, the name of the target variable
     (for stratification purposes), and an integer for a setting a seed
@@ -68,7 +68,7 @@ def get_lower_and_upper_bounds(df,col, k=1.5):
 
 ######### Cleaning Steps ##############
 
-def prep_data(df):
+def prep_data(df, drop_exception = False):
     
     df = reduce_time_frame(df)
     df = drop_columns(df)
@@ -77,6 +77,7 @@ def prep_data(df):
     df = rename_columns(df)
     df = rename_values(df)
     df = cast_column_types(df)
+    if drop_exception: df = drop_cleared_by_exception(df)
     df = engineer_features(df)
     
     return df 
@@ -197,6 +198,13 @@ def cast_column_types(df: pd.DataFrame) -> pd.DataFrame:
     df.occurrence_time = pd.to_datetime(df.occurrence_time, format = '%Y-%m-%dT%H:%M:%S')
     df.report_time = pd.to_datetime(df.report_time, format = '%Y-%m-%dT%H:%M:%S')
 
+    return df
+
+################################################################################
+
+def drop_cleared_by_exception(df: pd.DataFrame) -> pd.DataFrame:
+
+    df = df[~(df.clearance_status == 'cleared by exception')]
     return df
 
 ################################################################################

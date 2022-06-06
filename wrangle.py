@@ -14,9 +14,9 @@ from prepare import prep_data
 
 ################################################################################
 
-def wrangle_crime_data():
+def wrangle_crime_data(drop_cleared_by_exception = False):
     '''
         Acquire and prepare the Austin crime data from data.austintexas.gov.
     '''
 
-    return prep_data(get_crime_data())
+    return prep_data(get_crime_data(), drop_exception = drop_cleared_by_exception)
