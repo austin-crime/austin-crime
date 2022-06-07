@@ -153,7 +153,7 @@ Plan  -->  Acquire   --> Prepare  --> Explore  --> Model  --> Deliver
 
 ### Data Preparation
 
-<details><summary><i>Click to expand</i></summary>git
+<details><summary><i>Click to expand</i></summary>
 
 **Preparation Files:**
 - prepare.ipynb: Contains all steps and decisions made in the data preparation phase of the pipeline.
@@ -237,6 +237,7 @@ git clone git@github.com:austin-crime/austin-crime.git
 3. Additionally you will need to install the following packages:
     - [Sodapy](https://github.com/xmunoz/sodapy)
     - [Geopandas](https://geopandas.org/en/stable/)
+
 These can be installed by running the following commands in a terminal:
 ```bash
 pip install sodapy
