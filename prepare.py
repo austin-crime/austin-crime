@@ -219,6 +219,14 @@ def engineer_features(df: pd.DataFrame) -> pd.DataFrame:
     # Create a feature that is the difference between when a crime occurred and 
     # when it was reported.
     df['time_to_report'] = df.report_time - df.occurrence_time
+    
+    # Create a feature that indicates whether or not stay at home orders were in effect.
+
+    # Stay at home orders in Travis county began March 14, 2020. The end date for stay at home orders is tricky
+    # because stay at home orders were gradually lifted. We are using August 26, 2020 as an unofficial end to 
+    # stay at home orders. This is the date when the UT campus reopened.
+
+    df['pandemic_lockdown'] = np.where(((df.occurrence_date >= '2020-03-14') & (df.occurrence_date <= '2020-08-26')), True, False)
 
     return df
 
