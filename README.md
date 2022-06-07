@@ -237,6 +237,7 @@ git clone git@github.com:austin-crime/austin-crime.git
 3. Additionally you will need to install the following packages:
     - [Sodapy](https://github.com/xmunoz/sodapy)
     - [Geopandas](https://geopandas.org/en/stable/)
+    
 These can be installed by running the following commands in a terminal:
 ```bash
 pip install sodapy
