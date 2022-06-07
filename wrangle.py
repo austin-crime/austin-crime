@@ -25,7 +25,7 @@ def wrangle_crime_data(drop_cleared_by_exception = False):
 
 
 
-def wrangle_merged_df():
+def wrangle_merged_df(drop_columns = False):
     df = wrangle_crime_data(drop_cleared_by_exception=True)
     # Acquire our two dfs to be merged
     main_df = df.copy()
@@ -46,6 +46,12 @@ def wrangle_merged_df():
     
     # Merge the data sets using the newly created column in main_df
     merged = main_df.merge(districts_df, left_on= ['pd_district'], right_on= ['district_name'])
+    
+    if drop_columns == True:
+        columns_to_drop = ['district', 'pd_district', 'objectid', 'sort_order', 'jurisdiction_id', 
+                   'color', 'external_key', 'sector_name', 'input_date', 'modified_date', 
+                   'input_by', 'modified_by', 'command_phone_number', 'primary_key']
+        merged = merged.drop(columns = columns_to_drop)
     
     return merged 
  
