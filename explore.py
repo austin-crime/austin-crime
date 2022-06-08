@@ -13,8 +13,6 @@ top_10_crimes = ['DWI', 'ASSAULT WITH INJURY', 'THEFT BY SHOPLIFTING', 'HARASSME
                  'AUTO THEFT', 'ASSAULT W/INJURY-FAM/DATE VIOL', 'CRIMINAL MISCHIEF', 
                  'FAMILY DISTURBANCE', 'THEFT', 'BURGLARY OF VEHICLE']
 
-fontsize = 20
-
 # Create a subsetted df that only uses the top 10 crimes
 def subset_top_crimes(train):
     '''
@@ -29,7 +27,7 @@ def plot_cleared(df):
     plt.title("Distribution of Clearance")
     sns.countplot(y="cleared", data=df)
     plt.ylabel('Cleared')
-    plt.xlabel('Clearance Rate')
+    plt.xlabel('Clearance Count')
     plt.show()
     
 # Create subsetted dfs with caseloads for all districts, the highest caseload district and the lowest caseload district
@@ -90,19 +88,27 @@ def report_time_df(train):
     # Calculate a time_to_report feature
     report_time_df = train.copy()
     report_time_df['time_to_report'] = report_time_df.report_time - report_time_df.occurrence_time
-
     report_time_df['time_to_report_bins'] = pd.cut(
-        report_time_df.time_to_report,
-        [
-            pd.Timedelta('-1d'),
-            pd.Timedelta('24h'),
-            pd.Timedelta('10y')
-        ],
-        labels = [
-            'Less than 24 hours',
-            'Greater than 24 hours'
-        ]
-    )
+    report_time_df.time_to_report,
+    [
+        pd.Timedelta('-1d'),
+        pd.Timedelta('59s'),
+        pd.Timedelta('59m'),
+        pd.Timedelta('6h'),
+        pd.Timedelta('1d'),
+        pd.Timedelta('7d'),
+        pd.Timedelta('10y')
+    ],
+    labels = [
+        'No difference',
+        '1 minute - 1 hour',
+        '1 hour - 6 hours',
+        '6 hours - 1 day',
+        '1 day - 1 week',
+        'Greater than 1 week'
+    ])
+    report_time_df['time_to_report_less_than_6hrs'] = report_time_df.time_to_report <= pd.Timedelta('6h')
+    report_time_df['time_to_report_greater_than_6hrs'] = report_time_df.time_to_report > pd.Timedelta('6h')
     
     return report_time_df
     
@@ -118,7 +124,7 @@ def viz1(top_crimes_df):
     # remove y axis label
     plt.ylabel(None)
     #add title
-    plt.title('Top 10 Crimes as Percentage of Overall Crime Rate in Subset', fontsize = fontsize)
+    plt.title('Top 10 Crimes as Percentage of Overall Crime Rate in Subset')
     plt.show()
         
     
@@ -128,7 +134,7 @@ def viz2(top_crimes_df, train):
     '''
     # Calculate overall clearance rate
     clearance_rate = train.cleared.mean()
-    plt.title("Relationship Between Crime Type and Clearance Rate", fontsize = fontsize)
+    plt.title("Relationship Between Crime Type and Clearance Rate")
     sns.barplot(x="cleared", y="crime_type", data=top_crimes_df,
             order=['DWI', 'ASSAULT W/INJURY-FAM/DATE VIOL', 'THEFT BY SHOPLIFTING', 'AUTO THEFT', 
                    'ASSAULT WITH INJURY', 'THEFT', 'CRIMINAL MISCHIEF', 'FAMILY DISTURBANCE', 
@@ -149,7 +155,7 @@ def viz3(train):
                        .value_counts(ascending = False).index, color ='royalblue')
     plt.xlabel('Crime Count')# set up the x axis. 
     plt.ylabel('Council District')# set up the y axis
-    plt.title('Crime Rate by Council District', fontsize = fontsize) # set up the title.
+    plt.title('Crime Rate by Council District') # set up the title.
     plt.grid(color = 'lightgrey', linestyle = '-', linewidth = 0.5, alpha= 0.8)
     plt.show()
 
@@ -165,7 +171,7 @@ def viz4(train):
     ax = df1.plot.barh()
     plt.ylabel('Council District')
     plt.xlabel('% cleared')
-    plt.title('Percentage of Cleared Cases in Each District', fontsize = fontsize)
+    plt.title('Percentage of Cleared Cases in Each District')
     plt.legend()
     ax.get_legend().remove()
     plt.grid(color = 'lightgrey', linestyle = '-', linewidth = 0.5, alpha= 0.8)
@@ -178,7 +184,7 @@ def viz5(train2):
     and total number of crime types
     '''
     train2.groupby(['year', 'month']).crime_type.count().unstack(0).plot.line()
-    plt.title("Crime Frequency by Year", fontsize = fontsize)
+    plt.title("Crime Frequency by Year")
     plt.xlabel("Months")
     plt.ylabel("Number of Crimes")
     plt.tick_params('x', rotation=360)
@@ -195,7 +201,7 @@ def viz6(train2):
     #Take a look at all the crime types
     y.unstack(0).plot.bar()
     #sns.barplot(x=None, y = y, data = y, ci = None)
-    plt.title("Crime Frequency by Weekdays", fontsize = fontsize)
+    plt.title("Crime Frequency by Weekdays")
     plt.xlabel("Years")
     plt.ylabel("Number of Crimes")
     plt.tick_params('x', rotation=360)
@@ -207,11 +213,10 @@ def viz7(report_time_df):
     This fucntion will create a barplot for each bin of time to report
     '''
     sns.barplot(data = report_time_df, x = 'time_to_report_bins', y = 'cleared', ci = None)
-    
+    plt.xticks(rotation = 15)
     plt.xlabel('Time to report')
     plt.ylabel('Percentage of cases cleared')
-    plt.title('The sooner a crime is reported the more likely it is to be solved.', fontsize = fontsize)
-    plt.gca().yaxis.set_major_formatter('{:.0%}'.format)
+    plt.title('The sooner a crime is reported the more likely it is to be solved.')
     plt.show()
     
 #Statistical analysis 
