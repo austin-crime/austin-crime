@@ -211,6 +211,7 @@ def viz7(report_time_df):
     plt.xlabel('Time to report')
     plt.ylabel('Percentage of cases cleared')
     plt.title('The sooner a crime is reported the more likely it is to be solved.', fontsize = fontsize)
+    plt.gca().yaxis.set_major_formatter('{:.0%}'.format)
     plt.show()
     
 #Statistical analysis 
