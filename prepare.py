@@ -197,6 +197,9 @@ def cast_column_types(df: pd.DataFrame) -> pd.DataFrame:
     df.clearance_date = pd.to_datetime(df.clearance_date, format = '%Y-%m-%d')
     df.occurrence_time = pd.to_datetime(df.occurrence_time, format = '%Y-%m-%dT%H:%M:%S')
     df.report_time = pd.to_datetime(df.report_time, format = '%Y-%m-%dT%H:%M:%S')
+    
+    # By default council_district is a float type, we'll change it to an int.
+    df.council_district = df.council_district.astype('int')
 
     return df
 
