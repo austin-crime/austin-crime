@@ -22,14 +22,19 @@ def subset_top_crimes(train):
     return the new dataframe with all the records with just the list of crimes above.
     '''
     top_crimes_df = train.copy()
-    top_crimes_df = top_crimes_df[top_crimes_df.crime_type.isin(top_10_crimes)]
+    top_crimes_df['crime_type'] = np.where(top_crimes_df.crime_type.isin(top_10_crimes), top_crimes_df.crime_type, 'OTHER')
     return top_crimes_df
 
 def plot_cleared(df):
+    df.cleared.value_counts(normalize = True).plot.barh()
+
     plt.title("Distribution of Clearance")
-    sns.countplot(y="cleared", data=df)
+
     plt.ylabel('Cleared')
     plt.xlabel('Clearance Count')
+
+    plt.gca().xaxis.set_major_formatter('{:.0%}'.format)
+
     plt.show()
     
 # Create subsetted dfs with caseloads for all districts, the highest caseload district and the lowest caseload district
@@ -83,7 +88,7 @@ def friday_subsets(time_series_df):
 
 # Create a dataframe that is prepare for time-series analysis on crime reporting time
 
-def report_time_df(train):
+def create_report_time_df(train):
     '''
     This function will take in a dataframe and then create 6 bins base on time_to_report
     '''
@@ -95,12 +100,12 @@ def report_time_df(train):
         report_time_df.time_to_report,
         [
             pd.Timedelta('-1d'),
-            pd.Timedelta('24h'),
+            pd.Timedelta('5h'),
             pd.Timedelta('10y')
         ],
         labels = [
-            'Less than 24 hours',
-            'Greater than 24 hours'
+            'Less than 5 hours',
+            'Greater than 5 hours'
         ]
     )
     
@@ -132,9 +137,9 @@ def viz2(top_crimes_df, train):
     sns.barplot(x="cleared", y="crime_type", data=top_crimes_df,
             order=['DWI', 'ASSAULT W/INJURY-FAM/DATE VIOL', 'THEFT BY SHOPLIFTING', 'AUTO THEFT', 
                    'ASSAULT WITH INJURY', 'THEFT', 'CRIMINAL MISCHIEF', 'FAMILY DISTURBANCE', 
-                   'BURGLARY OF VEHICLE', 'HARASSMENT'], color ='royalblue', ci=None)
+                   'BURGLARY OF VEHICLE', 'HARASSMENT', 'OTHER'], color ='royalblue', ci=None)
     plt.axvline(clearance_rate, label="Overall Clearance rate", linestyle = '--', alpha=.8, color='orange')
-    plt.ylabel('Crime Type')
+    plt.ylabel('')
     plt.xlabel('Clearance Rate')
     plt.gca().xaxis.set_major_formatter(mpl.ticker.FuncFormatter('{:.0%}'.format))
     plt.legend()
@@ -145,12 +150,39 @@ def viz3(train):
     This function will take in the train dataset and return a seaborn 
     visual of the council district and their crime count in descending order
     '''
-    ax = sns.countplot(data = train, y = 'council_district',order = train['council_district']
-                       .value_counts(ascending = False).index, color ='royalblue')
-    plt.xlabel('Crime Count')# set up the x axis. 
-    plt.ylabel('Council District')# set up the y axis
-    plt.title('Crime Rate by Council District', fontsize = fontsize) # set up the title.
-    plt.grid(color = 'lightgrey', linestyle = '-', linewidth = 0.5, alpha= 0.8)
+    fig, ax = plt.subplots(ncols = 2, nrows = 1)
+
+    # sns.countplot(data = train, y = 'council_district',order = train['council_district']
+    #                    .value_counts(ascending = False).index, color ='royalblue', ax = ax[0])
+    # plt.xlabel('Crime Count')# set up the x axis. 
+    # plt.ylabel('Council District')# set up the y axis
+    # plt.title('Crime Rate by Council District', fontsize = fontsize) # set up the title.
+    # plt.grid(color = 'lightgrey', linestyle = '-', linewidth = 0.5, alpha= 0.8)
+
+    # index = [8,6,10,5,7,2,1,3,4,9]
+    # df1 = pd.DataFrame(train.groupby('council_district').cleared.mean())
+    # df1.plot.barh(ax = ax[1])
+    # plt.ylabel('Council District')
+    # plt.xlabel('% cleared')
+    # plt.title('Percentage of Cleared Cases in Each District', fontsize = fontsize)
+    # plt.legend()
+    # ax[1].get_legend().remove()
+    # plt.grid(color = 'lightgrey', linestyle = '-', linewidth = 0.5, alpha= 0.8)
+    # plt.gca().xaxis.set_major_formatter(mpl.ticker.FuncFormatter('{:.0%}'.format))
+
+    train.groupby('council_district').cleared.count().sort_values().plot.barh(ax = ax[0])
+    ax[0].set(xlabel = 'Crime Count')
+    ax[0].set(ylabel = 'Council District')
+    ax[0].set_title('Crime Total by Council District', fontsize = fontsize)
+    ax[0].grid(color = 'lightgrey', linestyle = '-', linewidth = 0.5, alpha= 0.8)
+
+    train.groupby('council_district').cleared.mean().reindex(index = [8, 10, 6, 5, 2, 1, 7, 4, 3, 9]).plot.barh(ax = ax[1])
+    ax[1].set(xlabel = '% Cleared')
+    ax[1].set(ylabel = 'Council District')
+    ax[1].set_title('Crime Rate by Council District', fontsize = fontsize)
+    ax[1].grid(color = 'lightgrey', linestyle = '-', linewidth = 0.5, alpha= 0.8)
+    ax[1].xaxis.set_major_formatter(mpl.ticker.FuncFormatter('{:.0%}'.format))
+
     plt.show()
 
     return
