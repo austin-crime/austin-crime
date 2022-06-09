@@ -179,7 +179,7 @@ def viz3(train):
     train.groupby('council_district').cleared.mean().reindex(index = [8, 10, 6, 5, 2, 1, 7, 4, 3, 9]).plot.barh(ax = ax[1])
     ax[1].set(xlabel = '% Cleared')
     ax[1].set(ylabel = 'Council District')
-    ax[1].set_title('Crime Rate by Council District', fontsize = fontsize)
+    ax[1].set_title('Clearance Rate by Council District', fontsize = fontsize)
     ax[1].grid(color = 'lightgrey', linestyle = '-', linewidth = 0.5, alpha= 0.8)
     ax[1].xaxis.set_major_formatter(mpl.ticker.FuncFormatter('{:.0%}'.format))
 
