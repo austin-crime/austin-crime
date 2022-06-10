@@ -117,11 +117,12 @@ def prep_data_for_modeling(df: pd.DataFrame) -> pd.DataFrame:
     # These are the features that will be used in modeling.
     features = [
         'crime_type',
+        'location_type',
         'council_district',
-        'latitude',
-        'longitude',
         'cleared',
-        'time_to_report'
+        'time_to_report',
+        'pandemic_lockdown',
+        'occurrence_date'
     ]
 
     df = df[features]
@@ -131,8 +132,17 @@ def prep_data_for_modeling(df: pd.DataFrame) -> pd.DataFrame:
     df = pd.concat([df, dummy_df], axis = 1)
     df = df.drop(columns = 'crime_type')
 
+    # One hot encode the location_type feature and drop the location_type feature.
+    dummy_df = pd.get_dummies(df['location_type'])
+    df = pd.concat([df, dummy_df], axis = 1)
+    df = df.drop(columns = 'location_type')
+
     # Convert the Timedelta type in time_to_report to a float representing the time in seconds.
     df['time_to_report'] = df.time_to_report / np.timedelta64(1, 's')
+
+    # Create a month column using the ocurrence_date and drop the occurrence_date feature.
+    df['month'] = df.occurrence_date.dt.month
+    df = df.drop(columns = 'occurrence_date')
 
     return df
 
