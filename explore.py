@@ -56,7 +56,7 @@ def create_time_series_df(train):
     '''
     This function will create a copy of a train dataframe and then
     set the occurence date as the index in order to create new feature for weekdays, months and years
-    and then change weekdays and months into catergoical variables
+    and then change weekdays and months into categorical variables
     '''
     train2 = train.copy()
     train2 = train2.set_index('occurrence_date').sort_index()
