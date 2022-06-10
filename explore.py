@@ -30,8 +30,10 @@ def plot_cleared(df):
 
     plt.title("Distribution of Clearance")
 
-    plt.ylabel('Cleared')
-    plt.xlabel('Clearance Count')
+    plt.ylabel('')
+    plt.xlabel('')
+
+    plt.yticks([False, True], labels = ['Not Cleared', 'Cleared'])
 
     plt.gca().xaxis.set_major_formatter('{:.0%}'.format)
 
@@ -50,7 +52,7 @@ def subset_districts(train):
     
 # Create a data frame for time-series analysis
 
-def time_series_df(train):
+def create_time_series_df(train):
     '''
     This function will create a copy of a train dataframe and then
     set the occurence date as the index in order to create new feature for weekdays, months and years
@@ -114,12 +116,25 @@ def create_report_time_df(train):
 
 # Visualizations for Final Notebook
 
+color_map = [
+    'lime',
+    'lightcoral',
+    'springgreen',
+    'mistyrose',
+    'darkgreen',
+    'maroon',
+    'olive',
+    'tomato',
+    'forestgreen',
+    'indianred',
+    'grey'
+]
 
 def viz1(top_crimes_df): 
     '''
     This function will create a percentage pie chart to show top 10 crimes
     '''
-    top_crimes_df.crime_type.value_counts().plot(kind='pie', y='cleared', autopct="%1.1f%%")
+    top_crimes_df.crime_type.value_counts().plot(kind = 'pie', y = 'cleared', autopct = "%1.0f%%", colors = color_map)
     # remove y axis label
     plt.ylabel(None)
     #add title
@@ -211,7 +226,7 @@ def viz5(train2):
     '''
     train2.groupby(['year', 'month']).crime_type.count().unstack(0).plot.line()
     plt.title("Crime Frequency by Year", fontsize = fontsize)
-    plt.xlabel("Months")
+    plt.xlabel("")
     plt.ylabel("Number of Crimes")
     plt.tick_params('x', rotation=360)
     plt.legend(bbox_to_anchor= (1.16,1))
