@@ -117,6 +117,41 @@ def prep_data_for_modeling(df: pd.DataFrame) -> pd.DataFrame:
     # These are the features that will be used in modeling.
     features = [
         'crime_type',
+        'council_district',
+        'cleared',
+        'time_to_report',
+        'pandemic_lockdown',
+        'occurrence_date'
+    ]
+
+    df = df[features]
+
+    # One hot encode the crime_type feature and drop the crime_type feature.
+    dummy_df = pd.get_dummies(df['crime_type'])
+    df = pd.concat([df, dummy_df], axis = 1)
+    df = df.drop(columns = 'crime_type')
+
+    # Convert the Timedelta type in time_to_report to a float representing the time in seconds.
+    df['time_to_report'] = df.time_to_report / np.timedelta64(1, 's')
+
+    # Create a month column using the ocurrence_date and drop the occurrence_date feature.
+    df['month'] = df.occurrence_date.dt.month
+    df = df.drop(columns = 'occurrence_date')
+
+    return df
+
+################################################################################
+
+def prep_data_for_modeling_alt(df: pd.DataFrame) -> pd.DataFrame:
+    '''
+        Prepare the data for modeling by removing features that won't be used, and 
+        encoding features as types that the machine learning models will be able to 
+        use.
+    '''
+
+    # These are the features that will be used in modeling.
+    features = [
+        'crime_type',
         'location_type',
         'council_district',
         'cleared',

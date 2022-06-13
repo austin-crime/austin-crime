@@ -260,6 +260,17 @@ def viz7(report_time_df):
     plt.title('The sooner a crime is reported the more likely it is to be solved.', fontsize = fontsize)
     plt.gca().yaxis.set_major_formatter('{:.0%}'.format)
     plt.show()
+
+def viz8(df):
+    plt.title("Clearance rate went down during the pandemic lockdown", fontsize=20)
+    df.groupby('pandemic_lockdown').cleared.mean().plot.bar(color=['royalblue', 'orange'])
+
+    plt.xticks([False, True], labels = ['No', 'Yes'], rotation = 0)
+    plt.yticks([.05, .10, .15, .20])
+
+    plt.ylabel('Clearance Rate', fontsize=13)
+    plt.xlabel('Stay at Home Order', fontsize=13)
+    plt.gca().yaxis.set_major_formatter('{:.0%}'.format)
     
 #Statistical analysis 
 
