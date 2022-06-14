@@ -254,11 +254,15 @@ These can be installed by running the following commands in a terminal:
 pip install sodapy
 pip install geopandas
 ```
-4. (Optional) Creating an app token is generally recommended for using the Socrata API with sodapy, however for the purposes of recreating this project it is not necessary. If you are interested in creating an app token follow the instructions [here](https://support.socrata.com/hc/en-us/articles/210138558-Generating-an-App-Token). Put your app token in an env.py file like so:
+4. (Optional) Alternatively, a requirements.txt file is provided that contains all the project dependencies. These can be installed with the following command:
+```bash
+pip install -r requirements.txt
+```
+5. (Optional) Creating an app token is generally recommended for using the Socrata API with sodapy, however for the purposes of recreating this project it is not necessary. If you are interested in creating an app token follow the instructions [here](https://support.socrata.com/hc/en-us/articles/210138558-Generating-an-App-Token). Put your app token in an env.py file like so:
 ```python
 app_token = 'your_app_token'
 ```
-5. Now you can start a Jupyter Notebook session (or your favorite iPython notebook environment) and execute the Final_Report.ipynb notebook.
+6. Now you can start a Jupyter Notebook session (or your favorite iPython notebook environment) and execute the Final_Report.ipynb notebook.
 
 </details>
 
