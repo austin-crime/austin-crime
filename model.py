@@ -30,7 +30,7 @@ from sklearn.naive_bayes import BernoulliNB
 
 ################################################################################
 
-random_seed = 911
+random_seed = 911 # Set the random seed as a global variable 
 
 ################################################################################
 
